@@ -130,15 +130,15 @@
     </header>
 
     <main id="app" class="px-4 w-full mx-auto min-h-screen max-w-5xl relative pb-24 overflow-hidden">        
-        <img src="1000038116.png" class="fixed bottom-10 -right-10 w-72 opacity-20 pointer-events-none z-0" style="transform: rotate(-5deg);">
-        <img src="1000037798.png" class="absolute top-32 -left-6 w-40 opacity-20 pointer-events-none z-0" style="transform: rotate(10deg);">
-        <img src="d059e498-638b-4035-ba81-b704b4ef3e0a-1_all_84295.png" class="absolute top-16 right-4 w-24 opacity-30 pointer-events-none z-0" style="transform: rotate(15deg);">
-        <img src="1000038206.png" class="absolute top-[700px] -right-8 w-48 opacity-20 pointer-events-none z-0" style="transform: rotate(-10deg);">
-        <img src="d059e498-638b-4035-ba81-b704b4ef3e0a-1_all_84309.png" class="absolute top-[1200px] left-2 w-32 opacity-25 pointer-events-none z-0" style="transform: rotate(-15deg);">
-        <img src="d059e498-638b-4035-ba81-b704b4ef3e0a-1_all_84296.png" class="absolute top-[1700px] right-2 w-32 opacity-25 pointer-events-none z-0" style="transform: rotate(10deg);">
-        <img src="1000038347.png" class="absolute top-[2200px] left-4 w-32 opacity-25 pointer-events-none z-0" style="transform: rotate(-5deg);">
-        <img src="1000038205.png" class="fixed bottom-32 -left-4 w-32 opacity-20 pointer-events-none z-0" style="transform: rotate(5deg);">
-        
+       <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f418/512.webp" class="fixed bottom-10 -right-10 w-48 opacity-20 pointer-events-none z-0" style="transform: rotate(-5deg);">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6fa/512.webp" class="absolute top-32 -left-6 w-28 opacity-20 pointer-events-none z-0" style="transform: rotate(10deg);">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f35c/512.webp" class="absolute top-16 right-4 w-24 opacity-30 pointer-events-none z-0" style="transform: rotate(15deg);">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f965/512.webp" class="absolute top-[700px] -right-8 w-28 opacity-25 pointer-events-none z-0" style="transform: rotate(-10deg);">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f5fa_fe0f/512.webp" class="absolute top-[1200px] left-2 w-28 opacity-25 pointer-events-none z-0" style="transform: rotate(-15deg);">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4f8/512.webp" class="absolute top-[1700px] right-2 w-24 opacity-25 pointer-events-none z-0" style="transform: rotate(10deg);">
+        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9f3/512.webp" class="fixed bottom-32 -left-4 w-24 opacity-20 pointer-events-none z-0" style="transform: rotate(5deg);">
+        <div id="custom-stickers-container" class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-40"></div>
+
         <section id="view-plan" class="view-section animate-fade relative z-10">
             <div class="flex justify-between items-center mb-6 mt-6">
                 <h3 class="text-pencil font-bold handwritten text-xl flex items-center"><i class="fa-solid fa-plane-departure mr-2 text-xl text-thai-blue"></i>航班資訊</h3>
@@ -228,12 +228,21 @@
                 </div>
             </div>
             <div id="expense-list" class="space-y-3 pb-24 md:grid md:grid-cols-2 md:gap-3 md:space-y-0"></div>
+            
             <div class="fixed bottom-24 right-6 md:right-10 z-30">
                 <button onclick="openExpenseModal()" class="bg-ink text-white rounded-full h-14 px-6 shadow-float flex items-center gap-2 hover:scale-105 transition active:scale-95 group border-2 border-white/20">
                     <i class="fa-solid fa-pen-nib text-xl group-hover:rotate-12 transition"></i> <span class="font-bold handwritten tracking-widest text-lg">記一筆</span>
                 </button>
             </div>
         </section>
+
+        <div class="fixed bottom-24 left-6 md:left-10 z-50">
+            <button onclick="document.getElementById('custom-sticker-upload').click()" class="bg-white/90 backdrop-blur text-thai-blue rounded-full w-14 h-14 shadow-float flex items-center justify-center hover:scale-105 transition active:scale-95 border-2 border-thai-blue/20" title="上傳自訂貼紙">
+                <i class="fa-solid fa-face-smile text-2xl"></i>
+                <div class="absolute -top-1 -right-1 bg-thai-red w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white font-bold"><i class="fa-solid fa-plus"></i></div>
+            </button>
+            <input type="file" id="custom-sticker-upload" accept="image/*" class="hidden" onchange="processStickerImage(this)">
+        </div>
 
         <section id="view-lists" class="view-section hidden relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -338,17 +347,20 @@
             <div class="mt-6 mb-6">
                 <div class="hand-card p-4 border-l-8 border-blue-200">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-bold text-blue-400 handwritten text-xl flex items-center gap-2"><i class="fa-solid fa-map"></i> 曼谷捷運 (BTS/MRT) 路線圖</h3>
-                        <a href="https://www.bts.co.th/eng/library/system-map.html" target="_blank" class="text-xs bg-gray-100 text-gray-500 px-3 py-1 rounded-full hover:bg-gray-200"><i class="fa-solid fa-download"></i> 官網</a>
-                    </div>
-                    <div class="relative rounded-xl overflow-hidden shadow-inner border border-gray-100 group cursor-pointer" onclick="viewPhoto('https://www.bts.co.th/library/system-map/images/bts-mrt-map.jpg')">
-                        <img src="https://www.bts.co.th/library/system-map/images/bts-mrt-map.jpg" class="w-full h-48 object-cover object-center group-hover:scale-105 transition duration-500" alt="交通地圖" onerror="this.src='https://images.unsplash.com/photo-1583508316719-7574b2f567b5?auto=format&fit=crop&q=80&w=1000';">
-                         <div class="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                            <span class="bg-white/80 px-3 py-1 rounded-full text-xs font-bold text-gray-700 backdrop-blur-md"><i class="fa-solid fa-magnifying-glass-plus"></i> 點擊放大</span>
+                        <h3 class="font-bold text-blue-400 handwritten text-xl flex items-center gap-2"><i class="fa-solid fa-map-location-dot"></i> 交通路線圖庫</h3>
+                        <div class="relative overflow-hidden inline-block">
+                            <button class="text-xs bg-blue-50 text-blue-500 border border-blue-200 px-3 py-1.5 rounded-full shadow-sm hover:bg-blue-500 hover:text-white transition font-bold active:scale-95 flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> 新增圖資
+                            </button>
+                            <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="addTransMapPhoto(this)">
                         </div>
                     </div>
+                    
+                    <div id="trans-maps-container" class="space-y-4"></div>
+                    
                 </div>
             </div>
+                        
 
             <div class="grid grid-cols-4 gap-3">
                 <a href="https://weather.com/weather/tenday/l/Chiang+Mai+Thailand" target="_blank" class="flex flex-col items-center justify-center bg-blue-50 hover:bg-blue-100 p-3 rounded-xl transition group no-underline text-center h-24">
@@ -422,7 +434,7 @@
         </div>
     </div>
 
-    <div id="acc-modal" class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 backdrop-blur-sm">
+<div id="acc-modal" class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 backdrop-blur-sm">
         <div class="bg-[#fdfaf6] w-full max-w-sm rounded-2xl p-5 shadow-2xl relative hand-card max-h-[80vh] overflow-hidden flex flex-col">
             <button onclick="closeModal('acc-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-times"></i></button>
             <h3 class="text-lg font-bold mb-4 text-center handwritten text-thai-blue flex items-center justify-center gap-2">
@@ -437,6 +449,18 @@
             <div class="relative w-full bg-thai-blue text-white py-3 rounded-xl font-bold text-center cursor-pointer shadow hover:bg-thai-blue/90 transition active:scale-95">
                 <i class="fa-solid fa-camera mr-1"></i> 新增照片
                 <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="addAccPhoto(this)">
+            </div>
+        </div>
+    </div>
+
+    <div id="trans-photos-modal" class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 backdrop-blur-sm">
+        <div class="bg-[#fdfaf6] w-full max-w-sm rounded-2xl p-5 shadow-2xl relative hand-card max-h-[80vh] overflow-hidden flex flex-col">
+            <button onclick="closeModal('trans-photos-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-times"></i></button>
+            <h3 class="text-lg font-bold mb-4 text-center handwritten text-thai-blue flex items-center justify-center gap-2">
+                <i class="fa-solid fa-train-subway"></i> 交通憑證照片
+            </h3>
+            <div class="flex-1 overflow-y-auto no-scrollbar mb-4 bg-white/50 rounded-xl border border-gray-100 p-2">
+                <div id="trans-photos-grid" class="grid grid-cols-2 gap-2"></div>
             </div>
         </div>
     </div>
@@ -608,7 +632,7 @@
                 <div id="day-trans-list" class="space-y-3"></div>
             </div>  
             
-            <textarea id="day-content-edit" class="w-full h-32 p-3 border rounded-lg bg-white text-sm mb-4 font-hand leading-relaxed resize-none" placeholder="行程內容... (請用反斜線 '\' 分隔每項活動，若內容包含'深度導覽'的標題，會自動產生連結)"></textarea>
+            <textarea id="day-content-edit" class="w-full h-32 p-3 border rounded-lg bg-white text-sm mb-4 font-hand leading-relaxed resize-none" placeholder="行程規劃...&#10;1. 可直接換行分隔活動&#10;2. 輸入 '*' 或 '|' 來產生備註 (例: 鄭王廟 * 記得租泰服)&#10;3. 輸入導覽標題會自動變連結"></textarea>
             
             <div class="bg-white p-3 rounded-lg border mb-4 space-y-4 shadow-sm">
                 <h4 class="text-xs font-bold text-gray-400 border-b pb-1">三餐安排 (輸入連結可跳轉)</h4>
@@ -799,11 +823,11 @@
         let tempThemes=[], currentPhotoBase64=null, currentGuidePhoto=null, currentShopPhoto=null, currentTransPhoto=null, tempDayPhotos=[], selectedPayers=[], selectedCat='餐飲';
         let tempTrans = []; let currentFlightPhoto = null; let currentAccDayId = null; 
         let currentTransPhotos = [];
+        let customStickers = []; // 儲存自訂貼紙
 
-        // --- 全域變數：目前顯示的城市 (all, chiangmai, bangkok) ---
         let currentCityFilter = 'all';
 
-        // --- 2. 核心功能 (CORE FUNCTIONS) ---
+        // --- CORE FUNCTIONS ---
         function getDataCount(dataObj) {
             if (!dataObj) {
                 return flights.length + itinerary.length + mustEatList.length + 
@@ -827,6 +851,7 @@
             localStorage.setItem('publicFundConfig_v2',JSON.stringify(c.publicFundConfig||{total:0,currency:'THB'}));
             localStorage.setItem('memo',c.memo||"");
             localStorage.setItem('vjwData', JSON.stringify(c.vjwData || { isOpen: true, items: [] }));
+            localStorage.setItem('customStickers', JSON.stringify(c.customStickers||[]));
             
             const cloudTime = c.lastUpdate ? c.lastUpdate : new Date().toISOString();
             localStorage.setItem('lastUpdate', cloudTime);
@@ -855,6 +880,10 @@
             publicFundConfig = JSON.parse(localStorage.getItem('publicFundConfig_v2')) || { total: 0, currency: 'THB' };
             vjwData = JSON.parse(localStorage.getItem('vjwData')) || { isOpen: true, items: [] };
             gistId = localStorage.getItem('gist_id') || ""; gistToken = localStorage.getItem('gist_token') || "";
+            customStickers = JSON.parse(localStorage.getItem('customStickers')) || [];
+            transMaps = JSON.parse(localStorage.getItem('transMaps')) || [
+    { id: 1, title: '曼谷捷運 (BTS/MRT) 路線圖', src: 'https://www.bts.co.th/library/system-map/images/bts-mrt-map.jpg', link: 'https://www.bts.co.th/eng/library/system-map.html' }
+];
             mustEatList.forEach(m => { if(!m.themes) m.themes = []; });
             expenses.forEach(e => {
                 if (!e.splitBy) {
@@ -867,7 +896,7 @@
         function saveData() {
             try {
                 const now = new Date();
-                
+                localStorage.setItem('transMaps', JSON.stringify(transMaps));
                 localStorage.setItem('flights', JSON.stringify(flights));
                 localStorage.setItem('itinerary_v3', JSON.stringify(itinerary));
                 localStorage.setItem('mustEatList', JSON.stringify(mustEatList));
@@ -882,6 +911,7 @@
                 localStorage.setItem('memo', memoText); 
                 localStorage.setItem('publicFundConfig_v2', JSON.stringify(publicFundConfig));
                 localStorage.setItem('vjwData', JSON.stringify(vjwData));
+                localStorage.setItem('customStickers', JSON.stringify(customStickers));
                 
                 localStorage.setItem('lastUpdate', now.toISOString());
 
@@ -895,15 +925,12 @@
             }
         }
 
-        // --- GIST SYNC ---
         function forceDownload(isAuto = false) {
             if(!gistId) return updateCloudStatus("未連線");
             if(!isAuto) updateCloudStatus("檢查中...");
             
             fetch(`https://api.github.com/gists/${gistId}?t=${Date.now()}`, {
-                headers: {
-                    'Authorization': `token ${gistToken}`
-                }
+                headers: { 'Authorization': `token ${gistToken}` }
             })
             .then(r => r.json())
             .then(async d => {
@@ -918,21 +945,16 @@
                 const localLastUpdate = localStorage.getItem('lastUpdate');
                 const localTime = localLastUpdate ? new Date(localLastUpdate).getTime() : 0;
 
-                console.log(`雲端: ${cloudTime} vs 本機: ${localTime}`);
-
                 if (cloudTime > localTime) {
-                    console.log("自動同步：下載雲端資料");
                     applyCloudData(cloudData); 
                 } 
                 else if (localTime > cloudTime) {
-                    console.log("自動同步：上傳本機資料");
                     forceUpload(true); 
                 } 
                 else {
                     updateCloudStatus("已同步");
                 }
             }).catch(e => {
-                console.error(e);
                 updateCloudStatus("連線失敗");
             });
         }
@@ -943,7 +965,7 @@
             
             const payload = { 
                 flights, itinerary, mustEatList, expenses, guides, shoppingList, payers, 
-                publicFundConfig, memo: memoText, vjwData, 
+                publicFundConfig, memo: memoText, vjwData, customStickers,
                 lastUpdate: new Date().toISOString() 
             };
             
@@ -954,14 +976,44 @@
                     body: JSON.stringify({ files: { "travel_data.json": { content: JSON.stringify(payload) } } }) 
                 }); 
                 updateCloudStatus("上傳成功"); 
-                if(isManual) console.log("✅ 上傳成功！"); 
             } catch(e){ 
-                console.error(e); 
                 updateCloudStatus("上傳失敗"); 
                 if(isManual) alert("❌ 上傳失敗，請檢查設定。");
             }
         }
-        
+        // --- 自動更新匯率功能 ---
+        async function updateExchangeRate() {
+            const btn = document.getElementById('btn-rate-update');
+            const icon = btn.querySelector('i');
+            
+            // 讓按鈕圖示旋轉，表示正在載入中
+            icon.classList.add('fa-spin'); 
+            
+            try {
+                // 使用免費且免金鑰的開源匯率 API (THB to TWD)
+                const res = await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/thb.json');
+                const data = await res.json();
+                const rate = data.thb.twd; // 取得 1 泰銖等於多少台幣
+                
+                if(rate) {
+                    const rateInput = document.getElementById('exchange-rate');
+                    // 更新輸入框的數值，取小數點後兩位 (例如 0.89)
+                    rateInput.value = rate.toFixed(2); 
+                    
+                    // 重新計算並渲染記帳頁面的金額
+                    renderExpenses(); 
+                    
+                    // (選用) 可以跳出小提示告訴自己更新成功，如果覺得吵可以把這行刪掉
+                    // alert("✅ 匯率已更新為最新牌告匯率：" + rate.toFixed(2));
+                }
+            } catch (e) {
+                console.error(e);
+                alert("❌ 匯率更新失敗，請檢查網路連線。");
+            } finally {
+                // 停止旋轉動畫
+                icon.classList.remove('fa-spin'); 
+            }
+        }
         function updateCloudStatus(msg) { 
             document.getElementById('cloud-status').innerHTML = `<i class="fa-solid fa-code-branch"></i> <span>${msg}</span>`; 
         }
@@ -969,16 +1021,19 @@
         function saveGistConfig() { 
             gistId = document.getElementById('gist-id-input').value.trim();
             gistToken = document.getElementById('gist-token-input').value.trim();
-            
             localStorage.setItem('gist_id', gistId);
             localStorage.setItem('gist_token', gistToken);
-            alert("設定已儲存！即即嘗試連線...");
             forceDownload();
         }
 
-        window.refreshUI = function() { reloadLocalData(); renderFlights(); renderItinerary(); renderGuides(); renderExpenses(); renderMustEatList(); renderChecklist(); renderShoppingList(); document.getElementById('memo-pad').value = memoText; renderVJW(); if(gistId){document.getElementById('gist-id-input').value=gistId;document.getElementById('gist-token-input').value=gistToken;} }
+        window.refreshUI = function() { 
+            reloadLocalData(); renderFlights(); renderItinerary(); renderGuides(); 
+            renderExpenses(); renderMustEatList(); renderChecklist(); renderTransMaps();renderShoppingList(); 
+            document.getElementById('memo-pad').value = memoText; renderVJW(); 
+            renderStickers();
+            if(gistId){document.getElementById('gist-id-input').value=gistId;document.getElementById('gist-token-input').value=gistToken;} 
+        }
 
-        // --- UI UTILS ---
         function openModal(id){ history.pushState({modal: id}, null, ""); document.getElementById(id).classList.remove('hidden'); setTimeout(()=>document.getElementById(id).classList.add('visible'),10); }
         function closeModal(id){ if(history.state && history.state.modal === id) { history.back(); } else { const el=document.getElementById(id); if(el){ el.classList.remove('visible'); setTimeout(()=>el.classList.add('hidden'),200); } } }
         window.onpopstate = function(event) { const activeModalId = event.state ? event.state.modal : null; document.querySelectorAll('.modal.visible').forEach(el => { if (el.id !== activeModalId) { el.classList.remove('visible'); setTimeout(() => el.classList.add('hidden'), 200); } }); };
@@ -1020,12 +1075,175 @@
             } 
         }
 
+        // --- 貼紙拖曳與上傳邏輯 ---
+        function processStickerImage(input) {
+            if(input.files && input.files.length > 0){ 
+                const file = input.files[0];
+                const r = new FileReader(); 
+                r.onload = e => { 
+                    const i = new Image(); 
+                    i.onload = () => { 
+                        const c = document.createElement('canvas'); 
+                        const x = c.getContext('2d'); 
+                        const max = 300; // 貼紙預設最大 300px
+                        let w = i.width, h = i.height; 
+                        if(w > h && w > max){ h *= max/w; w = max; } else if(h > max){ w *= max/h; h = max; } 
+                        c.width = w; c.height = h; 
+                        x.drawImage(i, 0, 0, w, h); 
+                        const base64 = c.toDataURL('image/png'); // 保留透明背景
+                        
+                        customStickers.push({
+                            id: Date.now(),
+                            src: base64,
+                            x: window.innerWidth / 2 - w / 2,
+                            y: window.scrollY + window.innerHeight / 2 - h / 2,
+                            w: w
+                        });
+                        saveData();
+                        renderStickers();
+                    }; 
+                    i.src = e.target.result;
+                }; 
+                r.readAsDataURL(file);
+            }
+            input.value = '';
+        }
+
+      function renderStickers() {
+            const container = document.getElementById('custom-stickers-container');
+            if(!container) return;
+            container.innerHTML = customStickers.map(s => `
+                <div id="sticker-${s.id}" class="absolute z-40 cursor-grab active:cursor-grabbing group select-none pointer-events-auto" 
+                     style="left: ${s.x}px; top: ${s.y}px; width: ${s.w}px;" 
+                     onmousedown="startDragSticker(event, ${s.id})" 
+                     ontouchstart="startDragSticker(event, ${s.id})">
+                    <img src="${s.src}" class="w-full h-auto drop-shadow-md pointer-events-none" draggable="false">
+                    <button onclick="deleteSticker(event, ${s.id})" class="absolute -top-3 -right-3 bg-red-400 text-white w-6 h-6 rounded-full text-xs opacity-50 hover:opacity-100 flex items-center justify-center shadow-sm active:scale-95 border-2 border-white"><i class="fa-solid fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        let activeSticker = null;
+        let stickerOffsetX = 0, stickerOffsetY = 0;
+
+        function startDragSticker(e, id) {
+            e.stopPropagation();
+            activeSticker = customStickers.find(s => s.id === id);
+            if (!activeSticker) return;
+            
+            const el = document.getElementById('sticker-' + id);
+            el.style.zIndex = 999;
+            
+            const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+            
+            const rect = el.getBoundingClientRect();
+            stickerOffsetX = pageX - (rect.left + window.scrollX);
+            stickerOffsetY = pageY - (rect.top + window.scrollY);
+        }
+
+        document.addEventListener('mousemove', dragSticker, {passive: false});
+        document.addEventListener('touchmove', dragSticker, {passive: false});
+
+        function dragSticker(e) {
+            if (!activeSticker) return;
+            e.preventDefault(); // 拖曳時防止畫面滑動
+            
+            const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+            const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+            
+            let newX = pageX - stickerOffsetX;
+            let newY = pageY - stickerOffsetY;
+            
+            const el = document.getElementById('sticker-' + activeSticker.id);
+            el.style.left = newX + 'px';
+            el.style.top = newY + 'px';
+        }
+
+        document.addEventListener('mouseup', endDragSticker);
+        document.addEventListener('touchend', endDragSticker);
+
+        function endDragSticker(e) {
+            if (!activeSticker) return;
+            const el = document.getElementById('sticker-' + activeSticker.id);
+            activeSticker.x = parseFloat(el.style.left);
+            activeSticker.y = parseFloat(el.style.top);
+            el.style.zIndex = 40; 
+            activeSticker = null;
+            saveData();
+        }
+
+        function deleteSticker(e, id) {
+            e.stopPropagation();
+            if(confirm('確定要移除這張貼紙嗎？')) {
+                customStickers = customStickers.filter(s => s.id !== id);
+                saveData();
+                renderStickers();
+            }
+        }
+
+        // --- END 貼紙拖曳與上傳邏輯 ---
+
         function viewPhoto(src) { document.getElementById('lightbox-image').src = src; openModal('lightbox-modal'); }
         function toggleZoom(img) { if(img.classList.contains('zoomed')){img.classList.remove('zoomed');}else{img.classList.add('zoomed');} }
         function addTransPhotos(input, index) { if (!input.files || input.files.length === 0) return; if (!tempTrans[index].photos) tempTrans[index].photos = []; Array.from(input.files).forEach(file => { processImage({ files: [file] }, (base64) => { tempTrans[index].photos.push(base64); renderTransRows(); }); }); input.value = ''; }
-        function openTransPhotosModal(dayId, transIdx) { const day = itinerary.find(d => d.id === dayId); if (!day || !day.transportation || !day.transportation[transIdx]) return; const trans = day.transportation[transIdx]; const photos = trans.photos || (trans.photo ? [trans.photo] : []); if (photos.length === 0) return alert("沒有照片"); const container = document.getElementById('trans-photos-grid'); container.innerHTML = photos.map(p => `<div class="relative group aspect-[4/3] rounded-lg overflow-hidden shadow-sm border border-gray-200 cursor-zoom-in" onclick="viewPhoto('${p}')"><img src="${p}" class="w-full h-full object-coverhover:scale-105 transition duration-500"></div>`).join(''); openModal('trans-photos-modal'); }
+        function openTransPhotosModal(dayId, transIdx) { const day = itinerary.find(d => d.id === dayId); if (!day || !day.transportation || !day.transportation[transIdx]) return; const trans = day.transportation[transIdx]; const photos = trans.photos || (trans.photo ? [trans.photo] : []); if (photos.length === 0) return alert("沒有照片"); const container = document.getElementById('trans-photos-grid'); container.innerHTML = photos.map(p => `<div class="relative group aspect-[4/3] rounded-lg overflow-hidden shadow-sm border border-gray-200 cursor-zoom-in" onclick="viewPhoto('${p}')"><img src="${p}" class="w-full h-full object-cover hover:scale-105 transition duration-500"></div>`).join(''); openModal('trans-photos-modal'); }
+// --- 交通圖資庫邏輯 ---
+        let transMaps = [];
 
-        // --- FUNCTIONS ---
+        function renderTransMaps() {
+            const container = document.getElementById('trans-maps-container');
+            if(!container) return;
+            
+            if (transMaps.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 text-sm py-4 border-2 border-dashed border-gray-100 rounded-xl">尚無交通圖，點擊右上角新增</div>';
+                return;
+            }
+
+            container.innerHTML = transMaps.map((map, i) => `
+                <div class="relative rounded-xl overflow-hidden shadow-sm border border-gray-200 group">
+                    <button onclick="deleteTransMap(${i})" class="absolute top-2 right-2 bg-white/80 text-red-500 w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:bg-red-500 hover:text-white transition z-10 backdrop-blur-sm opacity-80 group-hover:opacity-100 active:scale-95" title="刪除這張圖">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    ${map.title ? `
+<div class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl text-thai-blue z-10 shadow-lg flex items-center gap-2 border border-white transform rotate-[-1deg] origin-top-left">
+    <i class="fa-solid fa-compass text-thai-blue opacity-70 text-base"></i>
+    <span class="font-hand font-black text-xl tracking-wide">${map.title}</span>
+    
+    ${map.link ? `<a href="${map.link}" target="_blank" class="text-blue-500 hover:text-blue-700 transition ml-1" title="前往官網"><i class="fa-solid fa-link text-xs"></i></a>` : ''}
+</div>` : ''}
+                    <div class="cursor-pointer bg-white" onclick="viewPhoto('${map.src}')">
+                        <img src="${map.src}" class="w-full h-48 object-cover object-center group-hover:scale-105 transition duration-500" alt="${map.title || '交通地圖'}">
+                        <div class="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                            <span class="bg-white/90 px-4 py-1.5 rounded-full text-sm font-bold text-gray-700 backdrop-blur-md shadow-lg"><i class="fa-solid fa-magnifying-glass-plus"></i> 點擊放大</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addTransMapPhoto(input) {
+            processImage(input, (base64) => {
+                const title = prompt("請輸入這張路線圖的名稱 (例如: 清邁雙條車路線)：") || "自訂路線圖";
+                transMaps.push({
+                    id: Date.now(),
+                    title: title,
+                    src: base64,
+                    link: "" // 若有需要可以擴充讓使用者輸入官網連結
+                });
+                saveData();
+                renderTransMaps();
+            });
+            input.value = '';
+        }
+
+        function deleteTransMap(index) {
+            if(confirm("確定要移除這張交通圖嗎？")) {
+                transMaps.splice(index, 1);
+                saveData();
+                renderTransMaps();
+            }
+        }
         function openAccModal(dayId) { currentAccDayId = dayId; const day = itinerary.find(d => d.id === dayId); if (!day) return; document.getElementById('acc-modal-title').innerText = day.accommodation || day.date; renderAccPhotos(); openModal('acc-modal'); }
         function renderAccPhotos() { const day = itinerary.find(d => d.id === currentAccDayId); if (!day) return; const photos = day.accPhotos || []; const container = document.getElementById('acc-photos-grid'); if (photos.length === 0) { container.innerHTML = '<div class="col-span-2 text-center text-gray-400 py-8 text-sm">還沒有照片<br>點擊下方按鈕新增</div>'; } else { container.innerHTML = photos.map((p, i) => `<div class="relative group aspect-[4/3] rounded-lg overflow-hidden shadow-sm border border-gray-200"><img src="${p}" class="w-full h-full object-cover cursor-pointer hover:scale-105 transition duration-500" onclick="viewPhoto('${p}')"><button onclick="deleteAccPhoto(${i})" class="absolute top-1 right-1 bg-red-500/80 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow hover:bg-red-600 transition z-10"><i class="fa-solid fa-times"></i></button></div>`).join(''); } }
         function addAccPhoto(input) { processImage(input, (base64) => { const dayIdx = itinerary.findIndex(d => d.id === currentAccDayId); if (dayIdx > -1) { if (!itinerary[dayIdx].accPhotos) itinerary[dayIdx].accPhotos = []; itinerary[dayIdx].accPhotos.push(base64); saveData(); renderAccPhotos(); renderItinerary(); } }); input.value = ''; }
@@ -1034,7 +1252,6 @@
         function openGoogleTranslate(text = null) { const txt = text || document.getElementById('trans-input').value; if(!txt) return alert("沒有文字"); window.open(`https://translate.google.com/?sl=auto&tl=th&text=${encodeURIComponent(txt)}&op=translate`, '_blank'); }
         function renderPhrases(cat) { document.querySelectorAll('.phrase-btn').forEach(btn => { if(btn.dataset.cat === cat) btn.classList.add('active'); else btn.classList.remove('active'); }); const list = PHRASES[cat] || []; const container = document.getElementById('phrase-container'); container.innerHTML = list.map(item => `<div class="bg-gray-50 p-3 rounded-xl border border-gray-100 mb-2 hover:shadow-sm transition relative"><div class="flex justify-between items-start gap-2"><div class="flex-1"><div class="font-bold text-gray-800 text-base mb-1">${item.ja}</div><div class="text-[10px] text-gray-400 font-serif italic mb-1">${item.p}</div><div class="text-xs text-thai-blue font-bold">${item.zh}</div></div><button onclick="speak('${item.ja}')" class="shrink-0 w-8 h-8 rounded-full bg-white border border-thai-blue/30 text-thai-blue flex items-center justify-center shadow-sm active:scale-95 transition hover:bg-thai-blue hover:text-white"><i class="fa-solid fa-volume-high"></i></button></div></div>`).join(''); }
         function speak(text) { if (!window.speechSynthesis) return alert("不支援發音"); window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 0.8; window.speechSynthesis.speak(u); }
-        function searchDayWeather() { const rawLoc = document.getElementById('day-accommodation-edit').value; let loc = (typeof cleanLocationName === 'function') ? cleanLocationName(rawLoc) : rawLoc; if(!loc) loc = "曼谷"; window.open(`https://weather.com/weather/tenday/l/Chiang+Mai+Thailand`, '_blank'); }
 
         function renderTransRows(){
             const icons={'fa-train-subway':'鐵路','fa-bus':'巴士','fa-plane':'飛機','fa-taxi':'計程車','fa-ship':'船','fa-person-walking':'步行','fa-bicycle':'腳踏車'};
@@ -1052,13 +1269,51 @@
         function quickExpense(note, cat) { openExpenseModal(null, true);document.getElementById('ex-note').value = note; selectedCat = cat; renderCategoryUI();}
         function jumpToGuide(title) { switchTab('guide'); const backBtn = document.getElementById('btn-back-to-plan'); if(backBtn) backBtn.classList.remove('hidden'); const g = guides.find(i => i.title === title); if(g) { setTimeout(() => { const el = document.getElementById(`guide-${g.id}`); if (el) { el.scrollIntoView({behavior: "smooth", block: "center"}); el.classList.add('animate-highlight'); setTimeout(() => el.classList.remove('animate-highlight'), 2000); } }, 300); } }
         function goBackToPlan() { switchTab('plan'); document.getElementById('btn-back-to-plan').classList.add('hidden'); }
-        function linkifyContent(text) { let html = text.replace(/\n/g, '<br>'); guides.forEach(g => { if (g.title.length > 1) { const regex = new RegExp(`(${g.title})`, 'g'); html = html.replace(regex, `<span class="guide-link" onclick="jumpToGuide('$1')">$1</span>`); } }); return html.split('<br>').map(line => `<li class="flex items-start text-base"><span class="mr-2 mt-2 w-2 h-2 bg-thai-red rounded-full flex-shrink-0 border border-red-200"></span><span class="flex-1">${line}</span></li>`).join(''); }
-        
-        // --- 設定過濾城市狀態的按鈕邏輯 ---
+        function linkifyContent(text) { 
+            if(!text) return '';
+            let html = text; 
+            
+            // 處理導覽連結
+            guides.forEach(g => { 
+                if (g.title.length > 1) { 
+                    const regex = new RegExp(`(${g.title})`, 'g'); 
+                    html = html.replace(regex, `<span class="guide-link" onclick="jumpToGuide('$1')">$1</span>`); 
+                } 
+            }); 
+            
+            // 支援換行(\n)或反斜線(\)切分每一項活動
+            const lines = html.split(/\\|\n/).filter(l => l.trim() !== '');
+            
+            return lines.map(line => {
+                let activity = line;
+                let note = '';
+                
+                // 自動偵測 * 或 | 作為備註的分隔符號
+                if (activity.includes('*')) {
+                    const parts = activity.split('*');
+                    activity = parts[0].trim();
+                    note = parts.slice(1).join('*').trim();
+                } else if (activity.includes('|')) {
+                    const parts = activity.split('|');
+                    activity = parts[0].trim();
+                    note = parts.slice(1).join('|').trim();
+                }
+                
+                // 備註的 HTML 樣式 (手寫字體、灰色、加上小對話框圖示)
+                const noteHtml = note ? `<div class="text-xs text-gray-400 mt-1 font-hand tracking-wide leading-snug"><i class="fa-solid fa-comment-dots text-[10px] mr-1 opacity-50"></i>${note}</div>` : '';
+
+                return `<li class="flex items-start text-base mb-3 group/item">
+                    <span class="mr-2 mt-2 w-2 h-2 bg-thai-red rounded-full flex-shrink-0 border border-red-200 group-hover/item:scale-125 transition-transform duration-300"></span>
+                    <div class="flex-1 min-w-0">
+                        <div class="leading-relaxed text-gray-700 font-bold">${activity}</div>
+                        ${noteHtml}
+                    </div>
+                </li>`;
+            }).join(''); 
+        }       
         function filterCity(city) {
             currentCityFilter = city;
             
-            // 更新按鈕樣式
             document.getElementById('btn-filter-cm').className = city === 'chiangmai' 
                 ? 'px-4 py-1.5 rounded-full text-sm font-bold bg-thai-green text-white shadow-md transition-all active:scale-95' 
                 : 'px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-gray-600 transition-all active:scale-95';
@@ -1080,14 +1335,12 @@
             if (!c) return;
             c.innerHTML = '';
 
-            // 依據目前選擇過濾行程
             const filteredItinerary = itinerary.filter((day, idx) => {
-                if (currentCityFilter === 'chiangmai') return idx < 4;       // 前四天
-                if (currentCityFilter === 'bangkok') return idx >= 4 && idx < 9; // 後五天
-                return true; // 全部
+                if (currentCityFilter === 'chiangmai') return idx < 4;       
+                if (currentCityFilter === 'bangkok') return idx >= 4 && idx < 9; 
+                return true; 
             });
 
-            // 1. 渲染上方的雲朵導航
             if (navC && filteredItinerary.length > 0) {
                 const stickersHtml = filteredItinerary.map((day) => {
                     const originalIdx = itinerary.indexOf(day);
@@ -1100,14 +1353,12 @@
                 navC.innerHTML = '';
             }
 
-            // 2. 渲染每一天的行程卡片
             filteredItinerary.forEach((day) => {
-                const idx = itinerary.indexOf(day); // 確保 Day number 對應原始索引
+                const idx = itinerary.indexOf(day); 
                 
                 let contentHtml = (typeof linkifyContent === 'function') ? linkifyContent(day.content) : day.content;
                 const accLink = day.accommodationUrl || (typeof checkUrl === 'function' ? checkUrl(day.accommodation) : null);
                 
-                // 配色邏輯
                 const stickerThemes = [ { bg: 'bg-pink-50', border: 'border-pink-200', textMain: 'text-pink-700', textSub: 'text-pink-400' }, { bg: 'bg-yellow-50', border: 'border-yellow-200', textMain: 'text-yellow-800', textSub: 'text-yellow-500' }, { bg: 'bg-blue-50', border: 'border-blue-200', textMain: 'text-blue-700', textSub: 'text-blue-400' }, { bg: 'bg-green-50', border: 'border-green-200', textMain: 'text-green-700', textSub: 'text-green-500' }, { bg: 'bg-purple-50', border: 'border-purple-200', textMain: 'text-purple-700', textSub: 'text-purple-400' }, { bg: 'bg-orange-50', border: 'border-orange-200', textMain: 'text-orange-800', textSub: 'text-orange-500' }, { bg: 'bg-cyan-50', border: 'border-cyan-200', textMain: 'text-cyan-700', textSub: 'text-cyan-500' } ];
                 const theme = stickerThemes[idx % 7];
                 
@@ -1116,7 +1367,6 @@
                 let titleText = fullText.substring(dateText.length).trim();
                 if (!titleText) titleText = fullText;
 
-                // 天氣顯示
                 const searchUrl = "https://weather.com/weather/tenday/l/Chiang+Mai+Thailand";
                 const wIcon = (typeof WEATHER_MAP !== 'undefined') ? (WEATHER_MAP[day.weather] || '<i class="fa-solid fa-question text-gray-200"></i>') : '';
                 let tempBadgeHtml = '';
@@ -1129,19 +1379,14 @@
                 }
                 const weatherGroupHtml = (day.weather || day.temp) ? `<a href="${searchUrl}" target="_blank" class="weather-group group/weather no-underline mt-1 flex flex-col items-center" title="搜尋天氣">${tempBadgeHtml}<div class="weather-badge group-hover/weather:scale-110 transition-transform text-lg shadow-md border-2 border-white mt-0.5">${wIcon}</div></a>` : '';
 
-                // 每日照片集
                 const photosHtml = day.photos?.length ? `<div class="mt-3 grid grid-cols-3 gap-1 rounded-lg overflow-hidden">${day.photos.map(p=>`<img src="${p}" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90" onclick="viewPhoto('${p}')">`).join('')}</div>` : '';
                 
-                // 住宿資訊
                 const accHtml = day.accommodation ? `<div class="mt-3 text-sm text-gray-600 border-t pt-3 border-dashed border-gray-200"><div class="flex items-start gap-2"><button onclick="openAccModal('${day.id}')" class="w-8 h-8 rounded-full bg-thai-blue/10 hover:bg-thai-blue/20 text-thai-blue flex items-center justify-center transition shadow-sm active:scale-95 group relative flex-shrink-0" title="管理住宿照片"><i class="fa-solid fa-bed"></i>${day.accPhotos && day.accPhotos.length > 0 ? `<span class="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full border-2 border-white"></span>` : ''}</button><div class="flex-1 min-w-0 pt-1">${accLink ? `<a href="${accLink}" target="_blank" class="underline decoration-dotted hover:text-thai-blue font-bold block truncate text-base">${day.accommodation}</a>` : `<span class="font-bold block truncate text-base">${day.accommodation}</span>`}${day.accommodationNote ? `<div class="text-xs text-gray-400 mt-1 font-hand line-pre"><i class="fa-solid fa-circle-info mr-1 text-[10px]"></i>${day.accommodationNote}</div>` : ''}</div></div></div>` : '';
 
-                // 三餐資訊
                 const renderMealItem = (type, icon, color) => { const m = day.meals?.[type]; if(!m || !m.name) return ''; const linkPart = m.link ? `<a href="${m.link}" target="_blank" class="hover:text-thai-blue underline decoration-dotted ml-1 font-bold">${m.name}</a>` : `<span class="ml-1 font-bold">${m.name}</span>`; const notePart = m.note ? `<span class="text-[10px] text-gray-400 ml-2 border-l pl-2 border-gray-300 line-pre">${m.note}</span>` : ''; return `<div class="flex items-start gap-1 p-1"><i class="fa-solid ${icon} ${color} cursor-pointer hover:scale-125 transition flex-shrink-0 mt-0.5" onclick="quickExpense('${m.name}', '餐飲')" title="點擊記帳"></i><div class="flex-1 min-w-0">${linkPart}${notePart}</div></div>`; };
                 const mealsHtml = (day.meals && (day.meals.b?.name || day.meals.l?.name || day.meals.d?.name)) ? `<div class="mt-3 flex flex-col gap-2 text-xs text-gray-500 border-t border-dashed border-gray-200 pt-2 px-1">${renderMealItem('b', 'fa-mug-hot', 'text-orange-300')}${renderMealItem('l', 'fa-utensils', 'text-green-400')}${renderMealItem('d', 'fa-wine-glass', 'text-purple-400')}</div>` : '';
 
-                // 交通資訊
                 let transData = Array.isArray(day.transportation) ? day.transportation : (day.transportation ? [day.transportation] : []);
-                
                 const transHtml = transData.map((t) => {
                     let allPhotos = t.photos || [];
                     if (allPhotos.length === 0 && t.photo) {
@@ -1166,10 +1411,8 @@
                     </div>`;
                 }).join('');
 
-                // 備註
                 const noteHtml = day.dayNote ? `<div class="mt-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded border border-yellow-100 handwritten leading-relaxed line-pre"><i class="fa-solid fa-pencil mr-1"></i> ${day.dayNote}</div>` : '';
                 
-                // 卡片樣式設定
                 const isHighlight = day.highlight;
                 const titleStickerBg = isHighlight ? 'bg-[#fff0f5]' : 'bg-[#fff8e1]';
                 const titleStickerBorder = isHighlight ? 'border-thai-red' : 'border-[#e6dbbf]';
@@ -1255,18 +1498,15 @@
         function addDayPhoto(input) { processImage(input, (base64) => { tempDayPhotos.push(base64); renderDayPhotosPreview(); }); }
         function renderDayPhotosPreview() { document.getElementById('day-photos-preview').innerHTML = tempDayPhotos.map((p, i) => `<div class="relative"><img src="${p}" class="w-full h-full rounded"><button onclick="tempDayPhotos.splice(${i},1);renderDayPhotosPreview()" class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 text-xs">x</button></div>`).join(''); }
 
-        // --- GUIDE ---
         function renderGuides(){ const l=document.getElementById('guide-list'); l.innerHTML=''; if(window.guideSortable) window.guideSortable.destroy(); guides.forEach(g=>{ l.innerHTML+=`<div id="guide-${g.id}" data-id="${g.id}" class="hand-card p-0 overflow-hidden relative group transition-colors duration-500"><div class="drag-handle absolute top-0 left-0 h-full w-10 bg-black/5 flex items-center justify-center z-20 cursor-grab hover:bg-black/10 transition-colors"><i class="fa-solid fa-grip-vertical text-gray-400"></i></div><button onclick="event.stopPropagation(); openGuideModal(${g.id})" class="absolute top-2 right-2 z-50 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow hover:bg-white"><i class="fa-solid fa-pen text-gray-500"></i></button>${g.photo?`<img src="${g.photo}" class="w-full h-40 object-cover ml-10" style="width:calc(100% - 2.5rem)" onclick="viewPhoto('${g.photo}')">`:''} <div class="p-4 pl-14"><h3 class="font-bold text-lg font-hand text-xl">${g.title}</h3><div class="flex gap-2 mb-2 mt-1">${g.price ? `<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded"><i class="fa-solid fa-tag"></i> ${g.price}</span>` : ''}${g.time ? `<span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded"><i class="fa-regular fa-clock"></i> ${g.time}</span>` : ''}</div><p class="text-sm whitespace-pre-line text-gray-600 leading-relaxed">${g.desc}</p></div></div>`; }); window.guideSortable = new Sortable(l, { handle: '.drag-handle', animation: 150, onEnd: function (evt) { const item = guides.splice(evt.oldIndex, 1)[0]; guides.splice(evt.newIndex, 0, item); saveData(); } }); }
         function openGuideModal(id=null) { currentGuidePhoto=null; document.getElementById('guide-photo-preview').classList.add('hidden'); document.getElementById('guide-photo-text').classList.remove('hidden'); if(id){const g=guides.find(i=>i.id==id); document.getElementById('guide-id').value=g.id; document.getElementById('guide-title').value=g.title; document.getElementById('guide-desc').value=g.desc; document.getElementById('guide-price').value=g.price||""; document.getElementById('guide-time').value=g.time||""; if(g.photo){currentGuidePhoto=g.photo; document.getElementById('guide-photo-preview').src=g.photo; document.getElementById('guide-photo-preview').classList.remove('hidden'); document.getElementById('guide-photo-text').classList.add('hidden');}} else { ['guide-id','guide-title','guide-desc','guide-price','guide-time'].forEach(k=>document.getElementById(k).value=''); } openModal('guide-modal'); }
         function saveGuide() { const id=document.getElementById('guide-id').value, t=document.getElementById('guide-title').value; if(!t)return; const newItem = {id:id?parseInt(id):Date.now(), title:t, desc:document.getElementById('guide-desc').value, price:document.getElementById('guide-price').value, time:document.getElementById('guide-time').value, photo:currentGuidePhoto||(id?guides.find(i=>i.id==id).photo:null)}; if(id){const idx=guides.findIndex(i=>i.id==id);if(idx>-1)guides[idx]=newItem;}else{guides.push(newItem);} saveData(); renderGuides(); closeModal('guide-modal'); }
 
-        // --- FLIGHTS ---
         function renderFlights() { document.getElementById('flight-list-container').innerHTML = flights.map(f => { const planeIcon = f.url ? `<a href="${f.url}" target="_blank" class="cursor-pointer hover:scale-110 transition-transform inline-block" title="前往官網"><i class="fa-solid fa-plane text-thai-blue text-2xl rotate-[-45deg]"></i></a>` : `<i class="fa-solid fa-plane text-thai-blue text-2xl rotate-[-45deg]"></i>`; const codeDisplay = f.photo ? `<div onclick="viewPhoto('${f.photo}')" class="font-bold text-thai-blue text-xl handwritten cursor-pointer hover:text-blue-600 border-b-2 border-dashed border-thai-blue/30 inline-block px-2" title="查看機票截圖">${f.code} <i class="fa-solid fa-image text-[10px] align-top opacity-50"></i></div>` : `<div class="font-bold text-thai-blue text-xl handwritten">${f.code}</div>`; return `<div class="bg-white rounded-[24px] p-5 shadow-soft relative hand-card group"><button onclick="editFlight(${f.id})" class="absolute top-3 right-3 text-gray-300 hover:text-thai-blue transition"><i class="fa-solid fa-pen"></i></button><div class="flex justify-between items-center mb-4 px-2"><span class="text-4xl font-black handwritten text-pencil">${f.dep}</span>${planeIcon}<span class="text-4xl font-black handwritten text-pencil">${f.arr}</span></div><div class="bg-thai-blue-light/50 rounded-2xl py-3 px-4 text-center border border-thai-blue/10">${codeDisplay}<div class="text-lg font-bold text-gray-600 mt-2">${f.date} ${f.time}</div></div></div>`; }).join(''); }
         function saveFlight(){ const id=document.getElementById('flight-id').value; const f={ id:id?parseInt(id):Date.now(), dep:document.getElementById('flight-dep').value, arr:document.getElementById('flight-arr').value, code:document.getElementById('flight-code').value, time:document.getElementById('flight-time').value, date:document.getElementById('flight-date').value, url:document.getElementById('flight-url').value, photo: currentFlightPhoto }; if(id){const idx=flights.findIndex(i=>i.id==id);if(idx>-1)flights[idx]=f;}else{flights.push(f);} saveData(); renderFlights(); closeModal('flight-modal'); }
         function editFlight(id){ const f=flights.find(i=>i.id==id); if(f){ document.getElementById('flight-id').value=f.id; document.getElementById('flight-dep').value=f.dep; document.getElementById('flight-arr').value=f.arr; document.getElementById('flight-code').value=f.code; document.getElementById('flight-date').value=f.date; document.getElementById('flight-time').value=f.time; document.getElementById('flight-url').value=f.url; currentFlightPhoto = f.photo; if(f.photo) { document.getElementById('flight-photo-preview').src = f.photo; document.getElementById('flight-photo-preview').classList.remove('hidden'); } else { document.getElementById('flight-photo-preview').classList.add('hidden'); document.getElementById('flight-photo-preview').src = ""; } openModal('flight-modal'); } }
         function openFlightModal(){ ['flight-id','flight-dep','flight-arr','flight-code','flight-date','flight-time','flight-url'].forEach(k=>document.getElementById(k).value=''); currentFlightPhoto = null; document.getElementById('flight-photo-preview').classList.add('hidden'); document.getElementById('flight-photo-preview').src = ""; openModal('flight-modal'); }
 
-        // --- WALLET & CHARTS ---
         function renderExpenses() {
             const list = document.getElementById('expense-list'); 
             list.innerHTML = '';
@@ -1277,12 +1517,10 @@
             expenses.sort((a,b) => b.id - a.id).forEach(e => {
                 const cat = expenseCategories.find(c => c.id === e.cat) || expenseCategories[5];
                 const amt = parseFloat(e.amt);
-                const paidBy = e.paidBy || e.payer.split(',')[0]; // fallback
+                const paidBy = e.paidBy || e.payer.split(',')[0]; 
                 
-                // 計算公費支出
                 if (paidBy === '公費') pfSpent += (e.curr === 'THB' ? amt : amt / rate);
 
-                // 判斷是否為個人花銷
                 const isPersonal = (paidBy !== '公費') && (!e.splitBy || e.splitBy.length <= 1);
                 if (isPersonal) return;
 
@@ -1682,7 +1920,6 @@
         function deleteVJW(id){ if(confirm("Del?")){vjwData.items=vjwData.items.filter(i=>i.id!==id);saveData();renderVJW()} }
         function restoreDefaultTodos() { if(confirm("確定要恢復成內建的預設清單嗎？目前的自訂項目會消失喔！")) {todos = DEFAULT_TODOS.map(text => ({text, done: false}));saveData();renderChecklist();}}
         
-        // --- 點擊空白處自動存檔 ---
         function enableAutoSaveOnOutsideClick() {
             const modalMap = [
                 { id: 'day-modal',      save: saveDay },          
