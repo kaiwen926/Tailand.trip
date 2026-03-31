@@ -355,12 +355,9 @@
                             <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="addTransMapPhoto(this)">
                         </div>
                     </div>
-                    
                     <div id="trans-maps-container" class="space-y-4"></div>
-                    
                 </div>
             </div>
-                        
 
             <div class="grid grid-cols-4 gap-3">
                 <a href="https://weather.com/weather/tenday/l/Chiang+Mai+Thailand" target="_blank" class="flex flex-col items-center justify-center bg-blue-50 hover:bg-blue-100 p-3 rounded-xl transition group no-underline text-center h-24">
@@ -570,7 +567,7 @@
         </div>
     </div>
 
-    <div id="day-modal" class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 backdrop-blur-sm">
+<div id="day-modal" class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 backdrop-blur-sm">
         <div class="bg-[#fdfaf6] w-full max-w-lg rounded-2xl p-4 shadow-2xl relative hand-card h-[85vh] overflow-y-auto border-4 border-white">
             <button onclick="closeModal('day-modal')" class="absolute top-3 right-3 text-gray-400"><i class="fa-solid fa-times"></i></button>
             <h3 class="text-lg font-bold mb-2 text-center handwritten">編輯行程</h3>
@@ -580,12 +577,11 @@
                  <input type="text" id="day-date-edit" class="w-full p-2 border-b-2 border-thai-green bg-transparent font-bold font-hand text-2xl focus:outline-none placeholder-gray-300" placeholder="日期標題 (例如: Day 1 清邁)">
             </div>
             
-           <div class="flex gap-3 items-center mb-4">
+            <div class="flex gap-3 items-center mb-4">
                  <div class="flex-1 relative">
                     <i class="fa-solid fa-temperature-half absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                     <input type="text" id="day-temp-edit" placeholder="氣溫" class="w-full pl-8 p-2 bg-white border rounded-xl text-sm outline-none shadow-sm text-center font-bold text-gray-600 focus:border-thai-green transition">
                  </div>
-                 
                  <div class="flex-1 relative">
                      <select id="day-weather-edit" class="w-full p-2 bg-white border rounded-xl text-sm outline-none shadow-sm text-center appearance-none focus:border-thai-green transition cursor-pointer font-bold text-gray-600">
                          <option value="">☁ 選擇天氣</option>
@@ -600,24 +596,13 @@
                      </div>
                  </div>
             </div>
-                        <label class="flex items-center space-x-2 text-sm text-gray-600 mb-4 bg-yellow-50 p-2 rounded"><input type="checkbox" id="day-highlight-edit" class="accent-red-400"><span>標記為重點天數 (Highlight)</span></label>
-            
-            <div class="mb-4 bg-white p-2 rounded border border-gray-200 shadow-inner">
-                <div class="flex justify-between items-center mb-2">
-                    <h4 class="text-xs font-bold text-gray-400">當日相片集</h4>
-                    <div class="relative overflow-hidden inline-block">
-                        <button class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs hover:bg-gray-200"><i class="fa-solid fa-plus"></i> 新增</button>
-                        <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="addDayPhoto(this)">
-                    </div>
-                </div>
-                <div id="day-photos-preview" class="grid grid-cols-3 gap-2"></div>
-            </div>
+            <label class="flex items-center space-x-2 text-sm text-gray-600 mb-4 bg-yellow-50 p-2 rounded"><input type="checkbox" id="day-highlight-edit" class="accent-red-400"><span>標記為重點天數 (Highlight)</span></label>
             
             <div class="mb-4">
                 <label class="text-xs text-gray-400 font-bold mb-1 block">住宿資訊</label>
                 <input type="text" id="day-accommodation-edit" class="w-full p-2 border rounded text-sm mb-2" placeholder="住宿地點 (可直接貼 Google Maps 連結)">
                 <input type="url" id="day-accommodation-url-edit" class="w-full p-2 border rounded text-sm mb-2" placeholder="Google Maps 連結 (選填)">    
-                <textarea id="day-accommodation-note-edit" class="w-full p-2 border rounded text-xs bg-gray-50 text-gray-500 resize-none" rows="2" placeholder="住宿備註 (可分段，如: Wifi密碼&#10;Check-in時間)"></textarea>
+                <textarea id="day-accommodation-note-edit" class="w-full p-2 border rounded text-xs bg-gray-50 text-gray-500 resize-none" rows="2" placeholder="住宿備註 (可分段，如: Wifi密碼 Check-in時間)"></textarea>
             </div>
 
             <div class="mb-4 border-t pt-3 bg-gray-50 p-2 rounded-lg border border-gray-100">
@@ -636,7 +621,6 @@
             
             <div class="bg-white p-3 rounded-lg border mb-4 space-y-4 shadow-sm">
                 <h4 class="text-xs font-bold text-gray-400 border-b pb-1">三餐安排 (輸入連結可跳轉)</h4>
-                
                 <div class="border-b pb-2">
                     <div class="flex gap-2 mb-1 items-center">
                         <i class="fa-solid fa-mug-hot text-orange-300 w-5"></i>
@@ -645,7 +629,6 @@
                     <input type="url" id="meal-b-link" placeholder="早餐連結" class="w-full text-xs text-thai-blue bg-gray-50 p-1 rounded mb-1">
                     <textarea id="meal-b-note" placeholder="備註 (可分段，如: 泰奶必點)" class="w-full text-xs text-gray-400 border border-dashed border-gray-200 p-2 outline-none resize-none rounded mt-1" rows="2"></textarea>
                 </div>
-
                 <div class="border-b pb-2">
                     <div class="flex gap-2 mb-1 items-center">
                         <i class="fa-solid fa-utensils text-green-400 w-5"></i>
@@ -654,7 +637,6 @@
                     <input type="url" id="meal-l-link" placeholder="午餐連結" class="w-full text-xs text-thai-blue bg-gray-50 p-1 rounded mb-1">
                     <textarea id="meal-l-note" placeholder="備註 (可分段，如: 需排隊)" class="w-full text-xs text-gray-400 border border-dashed border-gray-200 p-2 outline-none resize-none rounded mt-1" rows="2"></textarea>
                 </div>
-
                 <div>
                     <div class="flex gap-2 mb-1 items-center">
                         <i class="fa-solid fa-wine-glass text-purple-400 w-5"></i>
@@ -664,8 +646,31 @@
                     <textarea id="meal-d-note" placeholder="備註 (可分段，如: 有預約)" class="w-full text-xs text-gray-400 border border-dashed border-gray-200 p-2 outline-none resize-none rounded mt-1" rows="2"></textarea>
                 </div>
             </div>
+
+            <div class="mb-4 border-t pt-3 bg-purple-50 p-2 rounded-lg border border-purple-100">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="text-xs font-bold text-purple-400 flex items-center gap-1">
+                        <i class="fa-solid fa-spa"></i> 按摩放鬆
+                    </h4>
+                    <button onclick="addMassageRow()" class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded hover:bg-purple-200 font-bold border border-purple-200 transition">
+                        <i class="fa-solid fa-plus"></i> 新增店家
+                    </button>
+                </div>
+                <div id="day-massage-list" class="space-y-3"></div>
+            </div>
             
             <textarea id="day-note-edit" class="w-full h-20 p-2 border border-yellow-200 bg-yellow-50 rounded text-sm mb-4 handwritten resize-none" placeholder="每日備註 (可換行排版)..."></textarea>
+            
+            <div class="mb-4 bg-white p-2 rounded border border-gray-200 shadow-inner">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="text-xs font-bold text-gray-400">當日相片集</h4>
+                    <div class="relative overflow-hidden inline-block">
+                        <button class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs hover:bg-gray-200"><i class="fa-solid fa-plus"></i> 新增</button>
+                        <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" onchange="addDayPhoto(this)">
+                    </div>
+                </div>
+                <div id="day-photos-preview" class="grid grid-cols-3 gap-2"></div>
+            </div>
             
             <div class="flex gap-2"><button onclick="deleteDay()" class="flex-1 bg-gray-200 text-gray-500 py-2 rounded-lg text-sm">刪除</button><button onclick="saveDay()" class="flex-[2] bg-thai-green text-white py-2 rounded-lg font-bold shadow">儲存</button></div>
         </div>
@@ -821,7 +826,7 @@
         let vjwData={isOpen:true,items:[]}, publicFundConfig={total:0,currency:'THB'};
         let currentShopOwnerIdx=0, inlineCategoryChart=null, inlineMemberChart=null, settlementChart=null, memberDetailChart=null, gistId="", gistToken="";
         let tempThemes=[], currentPhotoBase64=null, currentGuidePhoto=null, currentShopPhoto=null, currentTransPhoto=null, tempDayPhotos=[], selectedPayers=[], selectedCat='餐飲';
-        let tempTrans = []; let currentFlightPhoto = null; let currentAccDayId = null; 
+        let tempTrans = [];let tempMassages = []; let currentFlightPhoto = null; let currentAccDayId = null; 
         let currentTransPhotos = [];
         let customStickers = []; // 儲存自訂貼紙
 
@@ -1109,7 +1114,7 @@
             input.value = '';
         }
 
-      function renderStickers() {
+function renderStickers() {
             const container = document.getElementById('custom-stickers-container');
             if(!container) return;
             container.innerHTML = customStickers.map(s => `
@@ -1118,13 +1123,23 @@
                      onmousedown="startDragSticker(event, ${s.id})" 
                      ontouchstart="startDragSticker(event, ${s.id})">
                     <img src="${s.src}" class="w-full h-auto drop-shadow-md pointer-events-none" draggable="false">
-                    <button onclick="deleteSticker(event, ${s.id})" class="absolute -top-3 -right-3 bg-red-400 text-white w-6 h-6 rounded-full text-xs opacity-50 hover:opacity-100 flex items-center justify-center shadow-sm active:scale-95 border-2 border-white"><i class="fa-solid fa-times"></i></button>
+                    
+                    <button onclick="deleteSticker(event, ${s.id})" class="absolute -top-3 -right-3 bg-red-400 text-white w-6 h-6 rounded-full text-xs opacity-60 hover:opacity-100 flex items-center justify-center shadow-sm active:scale-95 border-2 border-white z-20"><i class="fa-solid fa-times"></i></button>
+                    
+                    <div onmousedown="startResizeSticker(event, ${s.id})" ontouchstart="startResizeSticker(event, ${s.id})" class="absolute -bottom-2 -right-2 bg-white text-thai-blue border border-gray-200 w-7 h-7 rounded-full flex items-center justify-center shadow-md opacity-60 hover:opacity-100 cursor-se-resize active:scale-95 z-20 touch-none">
+                        <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i>
+                    </div>
                 </div>
             `).join('');
         }
 
         let activeSticker = null;
         let stickerOffsetX = 0, stickerOffsetY = 0;
+        
+        // 新增：處理縮放的變數
+        let activeResizeSticker = null;
+        let startWidth = 0;
+        let startX = 0;
 
         function startDragSticker(e, id) {
             e.stopPropagation();
@@ -1142,35 +1157,76 @@
             stickerOffsetY = pageY - (rect.top + window.scrollY);
         }
 
-        document.addEventListener('mousemove', dragSticker, {passive: false});
-        document.addEventListener('touchmove', dragSticker, {passive: false});
-
-        function dragSticker(e) {
-            if (!activeSticker) return;
-            e.preventDefault(); // 拖曳時防止畫面滑動
+        // 新增：開始縮放
+        function startResizeSticker(e, id) {
+            e.stopPropagation(); // 阻止觸發外層的拖曳
+            e.preventDefault(); // 阻止手機畫面跟著滑動
+            activeResizeSticker = customStickers.find(s => s.id === id);
+            if (!activeResizeSticker) return;
             
             const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
-            const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
-            
-            let newX = pageX - stickerOffsetX;
-            let newY = pageY - stickerOffsetY;
-            
-            const el = document.getElementById('sticker-' + activeSticker.id);
-            el.style.left = newX + 'px';
-            el.style.top = newY + 'px';
+            startX = pageX;
+            startWidth = activeResizeSticker.w;
         }
 
-        document.addEventListener('mouseup', endDragSticker);
-        document.addEventListener('touchend', endDragSticker);
+        // 我們將原本分開的拖曳監聽器合併，統一交由這兩個函數處理
+        document.addEventListener('mousemove', handleStickerPointerMove, {passive: false});
+        document.addEventListener('touchmove', handleStickerPointerMove, {passive: false});
+        document.addEventListener('mouseup', handleStickerPointerUp);
+        document.addEventListener('touchend', handleStickerPointerUp);
 
-        function endDragSticker(e) {
-            if (!activeSticker) return;
-            const el = document.getElementById('sticker-' + activeSticker.id);
-            activeSticker.x = parseFloat(el.style.left);
-            activeSticker.y = parseFloat(el.style.top);
-            el.style.zIndex = 40; 
-            activeSticker = null;
-            saveData();
+        function handleStickerPointerMove(e) {
+            // 如果正在【縮放大小】
+            if (activeResizeSticker) {
+                e.preventDefault(); // 阻止畫面滾動
+                const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+                const diffX = pageX - startX;
+                let newWidth = startWidth + diffX;
+                
+                // 限制縮放範圍 (最小 40px，最大不超過螢幕寬度)
+                if (newWidth < 40) newWidth = 40; 
+                if (newWidth > Math.min(window.innerWidth - 40, 600)) newWidth = Math.min(window.innerWidth - 40, 600); 
+                
+                const el = document.getElementById('sticker-' + activeResizeSticker.id);
+                if (el) el.style.width = newWidth + 'px';
+                return;
+            }
+            
+            // 如果正在【拖曳移動】
+            if (activeSticker) {
+                e.preventDefault(); // 阻止畫面滾動
+                const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
+                const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
+                
+                let newX = pageX - stickerOffsetX;
+                let newY = pageY - stickerOffsetY;
+                
+                const el = document.getElementById('sticker-' + activeSticker.id);
+                if(el) {
+                    el.style.left = newX + 'px';
+                    el.style.top = newY + 'px';
+                }
+            }
+        }
+
+        function handleStickerPointerUp(e) {
+            if (activeResizeSticker) {
+                const el = document.getElementById('sticker-' + activeResizeSticker.id);
+                if (el) activeResizeSticker.w = parseFloat(el.style.width);
+                activeResizeSticker = null;
+                saveData();
+            }
+            
+            if (activeSticker) {
+                const el = document.getElementById('sticker-' + activeSticker.id);
+                if(el) {
+                    activeSticker.x = parseFloat(el.style.left);
+                    activeSticker.y = parseFloat(el.style.top);
+                    el.style.zIndex = 40; 
+                }
+                activeSticker = null;
+                saveData();
+            }
         }
 
         function deleteSticker(e, id) {
@@ -1181,7 +1237,6 @@
                 renderStickers();
             }
         }
-
         // --- END 貼紙拖曳與上傳邏輯 ---
 
         function viewPhoto(src) { document.getElementById('lightbox-image').src = src; openModal('lightbox-modal'); }
@@ -1269,6 +1324,41 @@
         function quickExpense(note, cat) { openExpenseModal(null, true);document.getElementById('ex-note').value = note; selectedCat = cat; renderCategoryUI();}
         function jumpToGuide(title) { switchTab('guide'); const backBtn = document.getElementById('btn-back-to-plan'); if(backBtn) backBtn.classList.remove('hidden'); const g = guides.find(i => i.title === title); if(g) { setTimeout(() => { const el = document.getElementById(`guide-${g.id}`); if (el) { el.scrollIntoView({behavior: "smooth", block: "center"}); el.classList.add('animate-highlight'); setTimeout(() => el.classList.remove('animate-highlight'), 2000); } }, 300); } }
         function goBackToPlan() { switchTab('plan'); document.getElementById('btn-back-to-plan').classList.add('hidden'); }
+        // --- 按摩功能邏輯 ---
+        // --- 按摩功能邏輯 (支援上傳價目表圖片) ---
+        function renderMassageRows() {
+            document.getElementById('day-massage-list').innerHTML = tempMassages.map((m, i) => `
+                <div class="bg-white p-2 rounded border border-purple-100 relative group mb-2 shadow-sm">
+                    <button onclick="tempMassages.splice(${i},1);renderMassageRows()" class="absolute top-1 right-1 text-gray-300 hover:text-red-400 w-5 h-5 rounded-full bg-gray-50 flex items-center justify-center z-10"><i class="fa-solid fa-times"></i></button>
+                    <div class="flex gap-2 mb-2 items-center pr-6">
+                        <input type="time" class="w-20 p-1 border rounded text-xs bg-gray-50 text-center outline-none text-purple-700 font-bold" value="${m.time||''}" onchange="tempMassages[${i}].time=this.value">
+                        <input type="text" placeholder="店家名稱" class="flex-1 p-1 border-b text-sm font-bold outline-none focus:border-purple-300" value="${m.name||''}" onchange="tempMassages[${i}].name=this.value">
+                    </div>
+                    <div class="flex gap-2 mb-2 items-center">
+                        <input type="url" placeholder="Google Maps / 官網連結" class="flex-1 p-1 border rounded text-xs bg-gray-50 outline-none text-blue-500" value="${m.link||''}" onchange="tempMassages[${i}].link=this.value">
+                        <label class="cursor-pointer flex items-center gap-1 text-xs text-purple-500 bg-purple-50 px-2 py-1 rounded border border-purple-100 hover:bg-purple-100 transition whitespace-nowrap font-bold shrink-0">
+                            <i class="fa-solid fa-camera"></i> ${m.photo ? '換圖' : '加圖'}
+                            <input type="file" accept="image/*" class="hidden" onchange="processImage(this, (b64) => { tempMassages[${i}].photo = b64; renderMassageRows(); })">
+                        </label>
+                    </div>
+                    <input type="text" placeholder="價目表文字 (例: 泰式 ฿300/hr)" class="w-full mb-2 p-1 border rounded text-xs bg-gray-50 outline-none text-gray-600 font-mono" value="${m.price||''}" onchange="tempMassages[${i}].price=this.value">
+                    <textarea placeholder="備註 (例: 指定女師傅、力道大)" class="w-full p-1 border rounded text-xs bg-gray-50 outline-none text-gray-500 resize-none" rows="1" onchange="tempMassages[${i}].note=this.value">${m.note||''}</textarea>
+                    
+                    ${m.photo ? `
+                    <div class="mt-2 relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200">
+                        <img src="${m.photo}" class="w-full h-full object-cover cursor-zoom-in" onclick="viewPhoto('${m.photo}')">
+                        <button onclick="tempMassages[${i}].photo=null; renderMassageRows()" class="absolute top-0 right-0 bg-red-500/80 text-white w-5 h-5 flex items-center justify-center text-[10px] hover:bg-red-500 rounded-bl-lg"><i class="fa-solid fa-times"></i></button>
+                    </div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function addMassageRow() {
+            // 加入 photo: null 以支援存圖
+            tempMassages.push({ time: '', name: '', link: '', price: '', note: '', photo: null });
+            renderMassageRows();
+        }
+        // --- 文字解析邏輯 (行程備註) ---
         function linkifyContent(text) { 
             if(!text) return '';
             let html = text; 
@@ -1310,7 +1400,7 @@
                     </div>
                 </li>`;
             }).join(''); 
-        }       
+        }
         function filterCity(city) {
             currentCityFilter = city;
             
@@ -1329,7 +1419,7 @@
             renderItinerary();
         }
 
-        function renderItinerary() {
+function renderItinerary() {
             const c = document.getElementById('itinerary-container');
             const navC = document.getElementById('quick-nav-container');
             if (!c) return;
@@ -1386,6 +1476,29 @@
                 const renderMealItem = (type, icon, color) => { const m = day.meals?.[type]; if(!m || !m.name) return ''; const linkPart = m.link ? `<a href="${m.link}" target="_blank" class="hover:text-thai-blue underline decoration-dotted ml-1 font-bold">${m.name}</a>` : `<span class="ml-1 font-bold">${m.name}</span>`; const notePart = m.note ? `<span class="text-[10px] text-gray-400 ml-2 border-l pl-2 border-gray-300 line-pre">${m.note}</span>` : ''; return `<div class="flex items-start gap-1 p-1"><i class="fa-solid ${icon} ${color} cursor-pointer hover:scale-125 transition flex-shrink-0 mt-0.5" onclick="quickExpense('${m.name}', '餐飲')" title="點擊記帳"></i><div class="flex-1 min-w-0">${linkPart}${notePart}</div></div>`; };
                 const mealsHtml = (day.meals && (day.meals.b?.name || day.meals.l?.name || day.meals.d?.name)) ? `<div class="mt-3 flex flex-col gap-2 text-xs text-gray-500 border-t border-dashed border-gray-200 pt-2 px-1">${renderMealItem('b', 'fa-mug-hot', 'text-orange-300')}${renderMealItem('l', 'fa-utensils', 'text-green-400')}${renderMealItem('d', 'fa-wine-glass', 'text-purple-400')}</div>` : '';
 
+                const massagesHtml = (day.massages && day.massages.length > 0) ? `<div class="mt-3 flex flex-col gap-2 text-xs text-gray-500 border-t border-dashed border-gray-200 pt-2 px-1">
+                    ${day.massages.map(m => {
+                        const linkPart = m.link ? `<a href="${m.link}" target="_blank" class="hover:text-purple-500 underline decoration-dotted ml-1 font-bold text-purple-700">${m.name}</a>` : `<span class="ml-1 font-bold text-purple-700">${m.name}</span>`;
+                        const timePart = m.time ? `<span class="font-mono bg-purple-50 text-purple-600 px-1 rounded mr-1 border border-purple-100">${m.time}</span>` : '';
+                        const pricePart = m.price ? `<div class="text-[10px] text-gray-500 ml-6 font-mono border-l-2 border-purple-100 pl-1"><i class="fa-solid fa-tag text-purple-300 mr-1"></i> ${m.price}</div>` : '';
+                        const notePart = m.note ? `<div class="text-[10px] text-gray-400 ml-6 border-l-2 border-purple-100 pl-1 line-pre">${m.note}</div>` : '';
+                        
+                        // 這是新增的圖片顯示區塊
+                        const photoPart = m.photo ? `<div class="ml-6 mt-1"><img src="${m.photo}" class="w-12 h-12 rounded border border-gray-200 object-cover cursor-zoom-in hover:scale-110 transition shadow-sm bg-white" onclick="viewPhoto('${m.photo}')"></div>` : '';
+                        
+                        return `<div class="flex flex-col gap-0.5 p-1 bg-purple-50/30 rounded-lg border border-purple-50">
+                            <div class="flex items-start">
+                                <i class="fa-solid fa-spa text-purple-400 mt-0.5"></i>
+                                <div class="flex-1 min-w-0 ml-1">
+                                    ${timePart}${linkPart}
+                                </div>
+                            </div>
+                            ${pricePart}
+                            ${notePart}
+                            ${photoPart}
+                        </div>`;
+                    }).join('')}
+                </div>` : '';
                 let transData = Array.isArray(day.transportation) ? day.transportation : (day.transportation ? [day.transportation] : []);
                 const transHtml = transData.map((t) => {
                     let allPhotos = t.photos || [];
@@ -1451,13 +1564,14 @@
                         ${accHtml}
                         ${transHtml}
                         ${mealsHtml}
+                        ${massagesHtml}
                         ${noteHtml}
                     </div>
                 </div>`;
             });
         }
         
-        function openDayEditor(id){ 
+function openDayEditor(id){ 
             const d=itinerary.find(i=>i.id===id); 
             if(!d)return; 
             document.getElementById('day-id-edit').value=d.id; 
@@ -1466,8 +1580,8 @@
             document.getElementById('day-weather-edit').value=d.weather||""; 
             document.getElementById('day-highlight-edit').checked=d.highlight; 
             document.getElementById('day-content-edit').value=d.content; 
-            document.getElementById('day-accommodation-edit').value=d.accommodation; 
-            document.getElementById('day-accommodation-url-edit').value=d.accommodationUrl; 
+           document.getElementById('day-accommodation-edit').value = d.accommodation || ''; 
+document.getElementById('day-accommodation-url-edit').value = d.accommodationUrl || '';
             document.getElementById('day-accommodation-note-edit').value = d.accommodationNote || ''; 
             
             tempTrans = []; 
@@ -1481,6 +1595,10 @@
             } 
             renderTransRows(); 
             
+            // 載入按摩資料
+            tempMassages = d.massages ? JSON.parse(JSON.stringify(d.massages)) : [];
+            renderMassageRows();
+            
             document.getElementById('day-note-edit').value=d.dayNote||''; 
             tempDayPhotos = d.photos ? [...d.photos] : []; 
             renderDayPhotosPreview(); 
@@ -1492,8 +1610,33 @@
             openModal('day-modal'); 
         }
 
-        function saveDay(){ const idx=itinerary.findIndex(i=>i.id===document.getElementById('day-id-edit').value); if(idx<0)return; const i=itinerary[idx]; i.date=document.getElementById('day-date-edit').value; i.temp = document.getElementById('day-temp-edit').value; i.weather=document.getElementById('day-weather-edit').value; i.highlight=document.getElementById('day-highlight-edit').checked; i.content=document.getElementById('day-content-edit').value; i.accommodation=document.getElementById('day-accommodation-edit').value; i.accommodationUrl=document.getElementById('day-accommodation-url-edit').value; i.accommodationNote = document.getElementById('day-accommodation-note-edit').value; i.transportation = tempTrans.filter(t => t.content || (t.photos && t.photos.length > 0) || t.note);i.dayNote=document.getElementById('day-note-edit').value; i.photos=[...tempDayPhotos]; i.meals = { b: { name: document.getElementById('meal-b-name').value, link: document.getElementById('meal-b-link').value, note: document.getElementById('meal-b-note').value }, l: { name: document.getElementById('meal-l-name').value, link: document.getElementById('meal-l-link').value, note: document.getElementById('meal-l-note').value }, d: { name: document.getElementById('meal-d-name').value, link: document.getElementById('meal-d-link').value, note: document.getElementById('meal-d-note').value } }; saveData(); renderItinerary(); closeModal('day-modal'); }
-        function addNewDay(){itinerary.push({id:'day_'+Date.now(),date:"New Day",highlight:false,content:"...",weather:""}); saveData(); renderItinerary();}
+        function saveDay(){ 
+            const idx=itinerary.findIndex(i=>i.id===document.getElementById('day-id-edit').value); 
+            if(idx<0)return; 
+            const i=itinerary[idx]; 
+            i.date=document.getElementById('day-date-edit').value; 
+            i.temp = document.getElementById('day-temp-edit').value; 
+            i.weather=document.getElementById('day-weather-edit').value; 
+            i.highlight=document.getElementById('day-highlight-edit').checked; 
+            i.content=document.getElementById('day-content-edit').value; 
+            i.accommodation=document.getElementById('day-accommodation-edit').value; 
+            i.accommodationUrl=document.getElementById('day-accommodation-url-edit').value; 
+            i.accommodationNote = document.getElementById('day-accommodation-note-edit').value; 
+            i.transportation = tempTrans.filter(t => t.content || (t.photos && t.photos.length > 0) || t.note);
+            
+            // 儲存按摩資料
+            i.massages = tempMassages.filter(m => m.name || m.note);
+            
+            i.dayNote=document.getElementById('day-note-edit').value; 
+            i.photos=[...tempDayPhotos]; 
+            i.meals = { 
+                b: { name: document.getElementById('meal-b-name').value, link: document.getElementById('meal-b-link').value, note: document.getElementById('meal-b-note').value }, 
+                l: { name: document.getElementById('meal-l-name').value, link: document.getElementById('meal-l-link').value, note: document.getElementById('meal-l-note').value }, 
+                d: { name: document.getElementById('meal-d-name').value, link: document.getElementById('meal-d-link').value, note: document.getElementById('meal-d-note').value } 
+            }; 
+            saveData(); renderItinerary(); closeModal('day-modal'); 
+        }
+       function addNewDay(){itinerary.push({id:'day_'+Date.now(),date:"",highlight:false,content:"",weather:""}); saveData(); renderItinerary();}
         function deleteDay(){if(confirm("Del?")){itinerary=itinerary.filter(d=>d.id!==document.getElementById('day-id-edit').value); saveData(); renderItinerary(); closeModal('day-modal');}}
         function addDayPhoto(input) { processImage(input, (base64) => { tempDayPhotos.push(base64); renderDayPhotosPreview(); }); }
         function renderDayPhotosPreview() { document.getElementById('day-photos-preview').innerHTML = tempDayPhotos.map((p, i) => `<div class="relative"><img src="${p}" class="w-full h-full rounded"><button onclick="tempDayPhotos.splice(${i},1);renderDayPhotosPreview()" class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 text-xs">x</button></div>`).join(''); }
