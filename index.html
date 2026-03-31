@@ -6,7 +6,7 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="泰蘭德的夏天">
+    <meta name="apple-mobile-web-app-title" content="泰國之旅">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#fdfaf6">
 
@@ -151,10 +151,10 @@
                  <h3 class="text-pencil font-bold handwritten text-xl flex items-center"><i class="fa-solid fa-map-location-dot mr-2 text-xl text-thai-green"></i>每日行程</h3>
             </div>
 
-            <div class="flex justify-center items-center gap-2 mb-6 mt-2 bg-white p-1.5 rounded-full shadow-sm border border-gray-100 mx-auto w-max z-20 relative">
-                <button onclick="filterCity('chiangmai')" id="btn-filter-cm" class="px-4 py-1.5 rounded-full text-sm font-bold bg-thai-green text-white shadow-md transition-all active:scale-95">清邁 (Day 1-4)</button>
-                <button onclick="filterCity('bangkok')" id="btn-filter-bkk" class="px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-gray-600 transition-all active:scale-95">曼谷 (Day 5-9)</button>
-                <button onclick="filterCity('all')" id="btn-filter-all" class="px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-gray-600 transition-all active:scale-95">全部</button>
+<div class="flex justify-center items-center gap-2 mb-6 mt-2 bg-white p-1.5 rounded-full shadow-sm border border-gray-100 mx-auto w-max z-20 relative">
+                <button onclick="filterCity('chiangmai')" id="btn-filter-cm" class="px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-gray-600 transition-all active:scale-95">清邁</button>
+                <button onclick="filterCity('bangkok')" id="btn-filter-bkk" class="px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-gray-600 transition-all active:scale-95">曼谷</button>
+                <button onclick="filterCity('all')" id="btn-filter-all" class="px-4 py-1.5 rounded-full text-sm font-bold bg-thai-gold text-white shadow-md transition-all active:scale-95">全部</button>
             </div>
           
           <div id="quick-nav-container" class="mb-8 px-2"></div>  
@@ -573,8 +573,13 @@
             <h3 class="text-lg font-bold mb-2 text-center handwritten">編輯行程</h3>
             <input type="hidden" id="day-id-edit">
             
-            <div class="mb-3">
-                 <input type="text" id="day-date-edit" class="w-full p-2 border-b-2 border-thai-green bg-transparent font-bold font-hand text-2xl focus:outline-none placeholder-gray-300" placeholder="日期標題 (例如: Day 1 清邁)">
+            <div class="mb-3 flex gap-2 items-end">
+                 <select id="day-city-edit" class="w-1/3 p-2 border-b-2 border-thai-green bg-transparent font-bold font-hand text-lg focus:outline-none text-gray-600 cursor-pointer">
+                     <option value="bangkok">曼谷</option>
+                     <option value="chiangmai">清邁</option>
+                     <option value="other">其他</option>
+                 </select>
+                 <input type="text" id="day-date-edit" class="w-2/3 p-2 border-b-2 border-thai-green bg-transparent font-bold font-hand text-2xl focus:outline-none placeholder-gray-300" placeholder="標題 (例: Day 1)">
             </div>
             
             <div class="flex gap-3 items-center mb-4">
@@ -1042,7 +1047,7 @@
         function openModal(id){ history.pushState({modal: id}, null, ""); document.getElementById(id).classList.remove('hidden'); setTimeout(()=>document.getElementById(id).classList.add('visible'),10); }
         function closeModal(id){ if(history.state && history.state.modal === id) { history.back(); } else { const el=document.getElementById(id); if(el){ el.classList.remove('visible'); setTimeout(()=>el.classList.add('hidden'),200); } } }
         window.onpopstate = function(event) { const activeModalId = event.state ? event.state.modal : null; document.querySelectorAll('.modal.visible').forEach(el => { if (el.id !== activeModalId) { el.classList.remove('visible'); setTimeout(() => el.classList.add('hidden'), 200); } }); };
-        function switchTab(t){ document.querySelectorAll('.view-section').forEach(e=>e.classList.add('hidden')); document.getElementById('view-'+t).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); document.querySelector(`[data-target="${t}"]`).classList.add('active'); if (t !== 'guide') { const backBtn = document.getElementById('btn-back-to-plan'); if(backBtn && !backBtn.classList.contains('hidden')) { backBtn.classList.add('hidden'); } } if (t === 'plan') { const el = document.getElementById('quick-nav-container'); if (window.scrollY < 100 && el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } } else { window.scrollTo(0,0); } }
+        function switchTab(t){ document.querySelectorAll('.view-section').forEach(e=>e.classList.add('hidden')); document.getElementById('view-'+t).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); document.querySelector(`[data-target="${t}"]`).classList.add('active'); if (t !== 'guide') { const backBtn = document.getElementById('btn-back-to-plan'); if(backBtn && !backBtn.classList.contains('hidden')) { backBtn.classList.add('hidden'); } } if (t === 'plan') { const el = document.getElementById('quick-nav-container'); if (window.scrollY < 100 && el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } } else { window.scrollTo(0,0); } renderStickers(); }
         
         async function uploadImageToGitHub(base64Content) {
             const username = 'kaiwen926'; const repo = 'tokyo.com'; const folder = 'images'; const token = localStorage.getItem('gist_token'); 
@@ -1090,19 +1095,23 @@
                     i.onload = () => { 
                         const c = document.createElement('canvas'); 
                         const x = c.getContext('2d'); 
-                        const max = 300; // 貼紙預設最大 300px
+                        const max = 300; 
                         let w = i.width, h = i.height; 
                         if(w > h && w > max){ h *= max/w; w = max; } else if(h > max){ w *= max/h; h = max; } 
                         c.width = w; c.height = h; 
                         x.drawImage(i, 0, 0, w, h); 
-                        const base64 = c.toDataURL('image/png'); // 保留透明背景
+                        const base64 = c.toDataURL('image/png'); 
+                        
+                        // 取得當前所在的分頁 (plan, guide, wallet, lists, info)
+                        const currentTab = document.querySelector('.nav-item.active').dataset.target;
                         
                         customStickers.push({
                             id: Date.now(),
                             src: base64,
                             x: window.innerWidth / 2 - w / 2,
                             y: window.scrollY + window.innerHeight / 2 - h / 2,
-                            w: w
+                            w: w,
+                            tab: currentTab // 記錄這張貼紙屬於哪個分頁
                         });
                         saveData();
                         renderStickers();
@@ -1117,14 +1126,22 @@
 function renderStickers() {
             const container = document.getElementById('custom-stickers-container');
             if(!container) return;
-            container.innerHTML = customStickers.map(s => `
+            const currentTab = document.querySelector('.nav-item.active').dataset.target;
+            
+            // 只顯示屬於當前分頁的貼紙 (如果舊貼紙沒有記錄分頁，預設讓它全域顯示以免不見)
+            const visibleStickers = customStickers.filter(s => s.tab === currentTab || !s.tab);
+
+            container.innerHTML = visibleStickers.map(s => `
                 <div id="sticker-${s.id}" class="absolute z-40 cursor-grab active:cursor-grabbing group select-none pointer-events-auto" 
-                     style="left: ${s.x}px; top: ${s.y}px; width: ${s.w}px;" 
+                     style="left: ${s.x}px; top: ${s.y}px; width: ${s.w}px; -webkit-touch-callout: none;" 
+                     oncontextmenu="event.preventDefault(); return false;"
                      onmousedown="startDragSticker(event, ${s.id})" 
-                     ontouchstart="startDragSticker(event, ${s.id})">
+                     ontouchstart="startDragSticker(event, ${s.id})"
+                     onmouseup="cancelLongPress()"
+                     ontouchend="cancelLongPress()"
+                     onmouseleave="cancelLongPress()"
+                     ontouchcancel="cancelLongPress()">
                     <img src="${s.src}" class="w-full h-auto drop-shadow-md pointer-events-none" draggable="false">
-                    
-                    <button onclick="deleteSticker(event, ${s.id})" class="absolute -top-3 -right-3 bg-red-400 text-white w-6 h-6 rounded-full text-xs opacity-60 hover:opacity-100 flex items-center justify-center shadow-sm active:scale-95 border-2 border-white z-20"><i class="fa-solid fa-times"></i></button>
                     
                     <div onmousedown="startResizeSticker(event, ${s.id})" ontouchstart="startResizeSticker(event, ${s.id})" class="absolute -bottom-2 -right-2 bg-white text-thai-blue border border-gray-200 w-7 h-7 rounded-full flex items-center justify-center shadow-md opacity-60 hover:opacity-100 cursor-se-resize active:scale-95 z-20 touch-none">
                         <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i>
@@ -1135,16 +1152,27 @@ function renderStickers() {
 
         let activeSticker = null;
         let stickerOffsetX = 0, stickerOffsetY = 0;
-        
-        // 新增：處理縮放的變數
         let activeResizeSticker = null;
-        let startWidth = 0;
-        let startX = 0;
+        let startWidth = 0, startX = 0;
+        
+        // 長按計時器
+        let longPressTimer = null;
 
         function startDragSticker(e, id) {
             e.stopPropagation();
             activeSticker = customStickers.find(s => s.id === id);
             if (!activeSticker) return;
+            
+            // 開始長按計時 (800毫秒)，如果時間到還沒放開，就觸發刪除
+            longPressTimer = setTimeout(() => {
+                if(confirm('確定要移除這張貼紙嗎？')) {
+                    customStickers = customStickers.filter(s => s.id !== id);
+                    saveData();
+                    renderStickers();
+                }
+                activeSticker = null; // 取消拖曳
+                longPressTimer = null;
+            }, 800);
             
             const el = document.getElementById('sticker-' + id);
             el.style.zIndex = 999;
@@ -1157,47 +1185,49 @@ function renderStickers() {
             stickerOffsetY = pageY - (rect.top + window.scrollY);
         }
 
-        // 新增：開始縮放
+        // 取消長按判定
+        function cancelLongPress() {
+            if (longPressTimer) {
+                clearTimeout(longPressTimer);
+                longPressTimer = null;
+            }
+        }
+
         function startResizeSticker(e, id) {
-            e.stopPropagation(); // 阻止觸發外層的拖曳
-            e.preventDefault(); // 阻止手機畫面跟著滑動
+            cancelLongPress(); // 縮放時取消長按
+            e.stopPropagation();
+            e.preventDefault();
             activeResizeSticker = customStickers.find(s => s.id === id);
             if (!activeResizeSticker) return;
-            
             const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
             startX = pageX;
             startWidth = activeResizeSticker.w;
         }
 
-        // 我們將原本分開的拖曳監聽器合併，統一交由這兩個函數處理
         document.addEventListener('mousemove', handleStickerPointerMove, {passive: false});
         document.addEventListener('touchmove', handleStickerPointerMove, {passive: false});
         document.addEventListener('mouseup', handleStickerPointerUp);
         document.addEventListener('touchend', handleStickerPointerUp);
 
         function handleStickerPointerMove(e) {
-            // 如果正在【縮放大小】
             if (activeResizeSticker) {
-                e.preventDefault(); // 阻止畫面滾動
+                e.preventDefault();
                 const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
                 const diffX = pageX - startX;
                 let newWidth = startWidth + diffX;
-                
-                // 限制縮放範圍 (最小 40px，最大不超過螢幕寬度)
                 if (newWidth < 40) newWidth = 40; 
                 if (newWidth > Math.min(window.innerWidth - 40, 600)) newWidth = Math.min(window.innerWidth - 40, 600); 
-                
                 const el = document.getElementById('sticker-' + activeResizeSticker.id);
                 if (el) el.style.width = newWidth + 'px';
                 return;
             }
             
-            // 如果正在【拖曳移動】
             if (activeSticker) {
-                e.preventDefault(); // 阻止畫面滾動
+                e.preventDefault(); 
+                cancelLongPress(); // 手指一滑動就代表在拖曳，取消長按刪除的判定
+                
                 const pageX = e.type.includes('mouse') ? e.pageX : e.touches[0].pageX;
                 const pageY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
-                
                 let newX = pageX - stickerOffsetX;
                 let newY = pageY - stickerOffsetY;
                 
@@ -1210,6 +1240,8 @@ function renderStickers() {
         }
 
         function handleStickerPointerUp(e) {
+            cancelLongPress(); // 手指放開，取消長按
+            
             if (activeResizeSticker) {
                 const el = document.getElementById('sticker-' + activeResizeSticker.id);
                 if (el) activeResizeSticker.w = parseFloat(el.style.width);
@@ -1228,17 +1260,6 @@ function renderStickers() {
                 saveData();
             }
         }
-
-        function deleteSticker(e, id) {
-            e.stopPropagation();
-            if(confirm('確定要移除這張貼紙嗎？')) {
-                customStickers = customStickers.filter(s => s.id !== id);
-                saveData();
-                renderStickers();
-            }
-        }
-        // --- END 貼紙拖曳與上傳邏輯 ---
-
         function viewPhoto(src) { document.getElementById('lightbox-image').src = src; openModal('lightbox-modal'); }
         function toggleZoom(img) { if(img.classList.contains('zoomed')){img.classList.remove('zoomed');}else{img.classList.add('zoomed');} }
         function addTransPhotos(input, index) { if (!input.files || input.files.length === 0) return; if (!tempTrans[index].photos) tempTrans[index].photos = []; Array.from(input.files).forEach(file => { processImage({ files: [file] }, (base64) => { tempTrans[index].photos.push(base64); renderTransRows(); }); }); input.value = ''; }
@@ -1401,9 +1422,8 @@ function renderStickers() {
                 </li>`;
             }).join(''); 
         }
-        function filterCity(city) {
+       function filterCity(city) {
             currentCityFilter = city;
-            
             document.getElementById('btn-filter-cm').className = city === 'chiangmai' 
                 ? 'px-4 py-1.5 rounded-full text-sm font-bold bg-thai-green text-white shadow-md transition-all active:scale-95' 
                 : 'px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-gray-600 transition-all active:scale-95';
@@ -1425,9 +1445,10 @@ function renderItinerary() {
             if (!c) return;
             c.innerHTML = '';
 
-            const filteredItinerary = itinerary.filter((day, idx) => {
-                if (currentCityFilter === 'chiangmai') return idx < 4;       
-                if (currentCityFilter === 'bangkok') return idx >= 4 && idx < 9; 
+            const filteredItinerary = itinerary.filter((day) => {
+                const city = day.city || 'bangkok';
+                if (currentCityFilter === 'chiangmai') return city === 'chiangmai';
+                if (currentCityFilter === 'bangkok') return city === 'bangkok';
                 return true; 
             });
 
@@ -1445,6 +1466,7 @@ function renderItinerary() {
 
             filteredItinerary.forEach((day) => {
                 const idx = itinerary.indexOf(day); 
+                const city = day.city || 'bangkok'; // 取得城市設定
                 
                 let contentHtml = (typeof linkifyContent === 'function') ? linkifyContent(day.content) : day.content;
                 const accLink = day.accommodationUrl || (typeof checkUrl === 'function' ? checkUrl(day.accommodation) : null);
@@ -1482,10 +1504,7 @@ function renderItinerary() {
                         const timePart = m.time ? `<span class="font-mono bg-purple-50 text-purple-600 px-1 rounded mr-1 border border-purple-100">${m.time}</span>` : '';
                         const pricePart = m.price ? `<div class="text-[10px] text-gray-500 ml-6 font-mono border-l-2 border-purple-100 pl-1"><i class="fa-solid fa-tag text-purple-300 mr-1"></i> ${m.price}</div>` : '';
                         const notePart = m.note ? `<div class="text-[10px] text-gray-400 ml-6 border-l-2 border-purple-100 pl-1 line-pre">${m.note}</div>` : '';
-                        
-                        // 這是新增的圖片顯示區塊
                         const photoPart = m.photo ? `<div class="ml-6 mt-1"><img src="${m.photo}" class="w-12 h-12 rounded border border-gray-200 object-cover cursor-zoom-in hover:scale-110 transition shadow-sm bg-white" onclick="viewPhoto('${m.photo}')"></div>` : '';
-                        
                         return `<div class="flex flex-col gap-0.5 p-1 bg-purple-50/30 rounded-lg border border-purple-50">
                             <div class="flex items-start">
                                 <i class="fa-solid fa-spa text-purple-400 mt-0.5"></i>
@@ -1499,6 +1518,7 @@ function renderItinerary() {
                         </div>`;
                     }).join('')}
                 </div>` : '';
+
                 let transData = Array.isArray(day.transportation) ? day.transportation : (day.transportation ? [day.transportation] : []);
                 const transHtml = transData.map((t) => {
                     let allPhotos = t.photos || [];
@@ -1526,13 +1546,29 @@ function renderItinerary() {
 
                 const noteHtml = day.dayNote ? `<div class="mt-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded border border-yellow-100 handwritten leading-relaxed line-pre"><i class="fa-solid fa-pencil mr-1"></i> ${day.dayNote}</div>` : '';
                 
-                const isHighlight = day.highlight;
-                const titleStickerBg = isHighlight ? 'bg-[#fff0f5]' : 'bg-[#fff8e1]';
-                const titleStickerBorder = isHighlight ? 'border-thai-red' : 'border-[#e6dbbf]';
-                const titleStickerText = isHighlight ? 'text-thai-red' : 'text-[#827355]';
+                // 城市主題切換邏輯 (重點標記會覆蓋城市顏色)
+                let titleStickerBg = day.highlight ? 'bg-[#fff0f5]' : 'bg-[#fff8e1]';
+                let titleStickerBorder = day.highlight ? 'border-thai-red' : 'border-[#e6dbbf]';
+                let titleStickerText = day.highlight ? 'text-thai-red' : 'text-[#827355]';
+                let timelineBorder = day.highlight ? 'border-thai-red' : 'border-gray-200';
+
+                // 根據選取的城市改變顏色
+                if (!day.highlight) {
+                    if (city === 'chiangmai') {
+                        titleStickerBg = 'bg-[#f0fdf4]'; // 淺綠
+                        titleStickerBorder = 'border-thai-green';
+                        titleStickerText = 'text-thai-green';
+                        timelineBorder = 'border-thai-green/40';
+                    } else if (city === 'bangkok') {
+                        titleStickerBg = 'bg-[#f0f9ff]'; // 淺藍
+                        titleStickerBorder = 'border-thai-blue/50';
+                        titleStickerText = 'text-thai-blue';
+                        timelineBorder = 'border-thai-blue/30';
+                    }
+                }
 
                 c.innerHTML += `
-                <div id="${day.id}" style="scroll-margin-top: 140px;" class="relative pl-12 sm:pl-16 border-l-2 ${isHighlight ? 'border-thai-red' : 'border-gray-200'} border-dashed pb-10 group">
+                <div id="${day.id}" style="scroll-margin-top: 140px;" class="relative pl-12 sm:pl-16 border-l-4 ${timelineBorder} border-dashed pb-10 group">
                     <div class="absolute -left-3 sm:-left-4 top-0 flex flex-col items-center z-10 w-12 sm:w-14">
                         <div onclick="document.getElementById('quick-nav-container').scrollIntoView({behavior: 'smooth', block: 'center'})" class="relative w-full aspect-square ${theme.bg} border-2 ${theme.border} rounded-xl shadow-md cursor-pointer flex flex-col items-center justify-center p-1 hover:border-thai-blue transition-colors z-20" title="回到上方雲朵">
                             <span class="text-[9px] font-black font-sans tracking-widest ${theme.textSub} mb-[-2px]">DAY</span>
@@ -1569,8 +1605,7 @@ function renderItinerary() {
                     </div>
                 </div>`;
             });
-        }
-        
+        }        
 function openDayEditor(id){ 
             const d=itinerary.find(i=>i.id===id); 
             if(!d)return; 
@@ -1636,8 +1671,75 @@ document.getElementById('day-accommodation-url-edit').value = d.accommodationUrl
             }; 
             saveData(); renderItinerary(); closeModal('day-modal'); 
         }
-       function addNewDay(){itinerary.push({id:'day_'+Date.now(),date:"",highlight:false,content:"",weather:""}); saveData(); renderItinerary();}
-        function deleteDay(){if(confirm("Del?")){itinerary=itinerary.filter(d=>d.id!==document.getElementById('day-id-edit').value); saveData(); renderItinerary(); closeModal('day-modal');}}
+       function addNewDay(){
+            itinerary.push({id:'day_'+Date.now(), date:"", city:"bangkok", highlight:false, content:"", weather:""}); 
+            saveData(); 
+            renderItinerary();
+        }
+
+        function openDayEditor(id){ 
+            const d=itinerary.find(i=>i.id===id); 
+            if(!d)return; 
+            document.getElementById('day-id-edit').value=d.id; 
+            document.getElementById('day-city-edit').value = d.city || 'bangkok'; // 讀取城市
+            document.getElementById('day-date-edit').value=d.date; 
+            document.getElementById('day-temp-edit').value = d.temp || ""; 
+            document.getElementById('day-weather-edit').value=d.weather||""; 
+            document.getElementById('day-highlight-edit').checked=d.highlight; 
+            document.getElementById('day-content-edit').value=d.content; 
+            document.getElementById('day-accommodation-edit').value = d.accommodation || ''; 
+            document.getElementById('day-accommodation-url-edit').value = d.accommodationUrl || ''; 
+            document.getElementById('day-accommodation-note-edit').value = d.accommodationNote || ''; 
+            
+            tempTrans = []; 
+            if (d.transportation) { 
+                let rawTrans = Array.isArray(d.transportation) ? d.transportation : [d.transportation];
+                tempTrans = JSON.parse(JSON.stringify(rawTrans));
+                tempTrans.forEach(t => {
+                    if (!t.photos) t.photos = [];
+                    if (t.photo) { t.photos.push(t.photo); delete t.photo; }
+                });
+            } 
+            renderTransRows(); 
+            
+            tempMassages = d.massages ? JSON.parse(JSON.stringify(d.massages)) : [];
+            renderMassageRows();
+            
+            document.getElementById('day-note-edit').value=d.dayNote||''; 
+            tempDayPhotos = d.photos ? [...d.photos] : []; 
+            renderDayPhotosPreview(); 
+            ['b','l','d'].forEach(t => { 
+                document.getElementById('meal-'+t+'-name').value = d.meals?.[t]?.name || ''; 
+                document.getElementById('meal-'+t+'-link').value = d.meals?.[t]?.link || ''; 
+                document.getElementById('meal-'+t+'-note').value = d.meals?.[t]?.note || ''; 
+            }); 
+            openModal('day-modal'); 
+        }
+
+        function saveDay(){ 
+            const idx=itinerary.findIndex(i=>i.id===document.getElementById('day-id-edit').value); 
+            if(idx<0)return; 
+            const i=itinerary[idx]; 
+            i.city = document.getElementById('day-city-edit').value; // 儲存城市
+            i.date=document.getElementById('day-date-edit').value; 
+            i.temp = document.getElementById('day-temp-edit').value; 
+            i.weather=document.getElementById('day-weather-edit').value; 
+            i.highlight=document.getElementById('day-highlight-edit').checked; 
+            i.content=document.getElementById('day-content-edit').value; 
+            i.accommodation=document.getElementById('day-accommodation-edit').value; 
+            i.accommodationUrl=document.getElementById('day-accommodation-url-edit').value; 
+            i.accommodationNote = document.getElementById('day-accommodation-note-edit').value; 
+            i.transportation = tempTrans.filter(t => t.content || (t.photos && t.photos.length > 0) || t.note);
+            i.massages = tempMassages.filter(m => m.name || m.note);
+            i.dayNote=document.getElementById('day-note-edit').value; 
+            i.photos=[...tempDayPhotos]; 
+            i.meals = { 
+                b: { name: document.getElementById('meal-b-name').value, link: document.getElementById('meal-b-link').value, note: document.getElementById('meal-b-note').value }, 
+                l: { name: document.getElementById('meal-l-name').value, link: document.getElementById('meal-l-link').value, note: document.getElementById('meal-l-note').value }, 
+                d: { name: document.getElementById('meal-d-name').value, link: document.getElementById('meal-d-link').value, note: document.getElementById('meal-d-note').value } 
+            }; 
+            saveData(); renderItinerary(); closeModal('day-modal'); 
+        }
         function addDayPhoto(input) { processImage(input, (base64) => { tempDayPhotos.push(base64); renderDayPhotosPreview(); }); }
         function renderDayPhotosPreview() { document.getElementById('day-photos-preview').innerHTML = tempDayPhotos.map((p, i) => `<div class="relative"><img src="${p}" class="w-full h-full rounded"><button onclick="tempDayPhotos.splice(${i},1);renderDayPhotosPreview()" class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 text-xs">x</button></div>`).join(''); }
 
