@@ -1445,10 +1445,9 @@ function renderItinerary() {
             if (!c) return;
             c.innerHTML = '';
 
-            const filteredItinerary = itinerary.filter((day) => {
-                const city = day.city || 'bangkok';
-                if (currentCityFilter === 'chiangmai') return city === 'chiangmai';
-                if (currentCityFilter === 'bangkok') return city === 'bangkok';
+            const filteredItinerary = itinerary.filter((day, idx) => {
+                if (currentCityFilter === 'chiangmai') return idx < 4;       
+                if (currentCityFilter === 'bangkok') return idx >= 4 && idx < 9; 
                 return true; 
             });
 
@@ -1459,14 +1458,16 @@ function renderItinerary() {
                     const theme = themes[originalIdx % 7];
                     return `<button onclick="document.getElementById('${day.id}').scrollIntoView({behavior: 'smooth', block: 'start'})" class="relative w-full aspect-square flex items-center justify-center group hover:-translate-y-1 transition-transform duration-300"><i class="fa-solid fa-cloud text-5xl sm:text-6xl ${theme.cloud} drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i><div class="absolute inset-0 flex flex-col items-center justify-center pt-3 pb-1"><span class="text-[8px] font-bold opacity-60 tracking-wider mb-px font-sans ${theme.text}">DAY</span><span class="text-xl font-black font-maru leading-none ${theme.text}">${originalIdx + 1}</span></div></button>`;
                 }).join('');
-                navC.innerHTML = `<div class="grid grid-cols-7 gap-1 max-w-md mx-auto px-1">${stickersHtml}</div>`;
+                
+                // 新增一個小提示告訴自己可以拖曳
+                navC.innerHTML = `<div class="grid grid-cols-7 gap-1 max-w-md mx-auto px-1">${stickersHtml}</div>
+                                  <div class="text-center text-[11px] text-gray-400 mt-3 font-hand tracking-wider"><i class="fa-solid fa-arrows-up-down"></i> 提示：按住下方的 DAY 標籤可以上下拖曳換天數喔！</div>`;
             } else if (navC) {
                 navC.innerHTML = '';
             }
 
             filteredItinerary.forEach((day) => {
                 const idx = itinerary.indexOf(day); 
-                const city = day.city || 'bangkok'; // 取得城市設定
                 
                 let contentHtml = (typeof linkifyContent === 'function') ? linkifyContent(day.content) : day.content;
                 const accLink = day.accommodationUrl || (typeof checkUrl === 'function' ? checkUrl(day.accommodation) : null);
@@ -1546,37 +1547,22 @@ function renderItinerary() {
 
                 const noteHtml = day.dayNote ? `<div class="mt-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded border border-yellow-100 handwritten leading-relaxed line-pre"><i class="fa-solid fa-pencil mr-1"></i> ${day.dayNote}</div>` : '';
                 
-                // 城市主題切換邏輯 (重點標記會覆蓋城市顏色)
-                let titleStickerBg = day.highlight ? 'bg-[#fff0f5]' : 'bg-[#fff8e1]';
-                let titleStickerBorder = day.highlight ? 'border-thai-red' : 'border-[#e6dbbf]';
-                let titleStickerText = day.highlight ? 'text-thai-red' : 'text-[#827355]';
-                let timelineBorder = day.highlight ? 'border-thai-red' : 'border-gray-200';
-
-                // 根據選取的城市改變顏色
-                if (!day.highlight) {
-                    if (city === 'chiangmai') {
-                        titleStickerBg = 'bg-[#f0fdf4]'; // 淺綠
-                        titleStickerBorder = 'border-thai-green';
-                        titleStickerText = 'text-thai-green';
-                        timelineBorder = 'border-thai-green/40';
-                    } else if (city === 'bangkok') {
-                        titleStickerBg = 'bg-[#f0f9ff]'; // 淺藍
-                        titleStickerBorder = 'border-thai-blue/50';
-                        titleStickerText = 'text-thai-blue';
-                        timelineBorder = 'border-thai-blue/30';
-                    }
-                }
+                const isHighlight = day.highlight;
+                const titleStickerBg = isHighlight ? 'bg-[#fff0f5]' : 'bg-[#fff8e1]';
+                const titleStickerBorder = isHighlight ? 'border-thai-red' : 'border-[#e6dbbf]';
+                const titleStickerText = isHighlight ? 'text-thai-red' : 'text-[#827355]';
 
                 c.innerHTML += `
-                <div id="${day.id}" style="scroll-margin-top: 140px;" class="relative pl-12 sm:pl-16 border-l-4 ${timelineBorder} border-dashed pb-10 group">
-                    <div class="absolute -left-3 sm:-left-4 top-0 flex flex-col items-center z-10 w-12 sm:w-14">
-                        <div onclick="document.getElementById('quick-nav-container').scrollIntoView({behavior: 'smooth', block: 'center'})" class="relative w-full aspect-square ${theme.bg} border-2 ${theme.border} rounded-xl shadow-md cursor-pointer flex flex-col items-center justify-center p-1 hover:border-thai-blue transition-colors z-20" title="回到上方雲朵">
-                            <span class="text-[9px] font-black font-sans tracking-widest ${theme.textSub} mb-[-2px]">DAY</span>
-                            <span class="text-2xl font-black font-maru leading-none ${theme.textMain}">${idx + 1}</span>
-                            <span class="text-[10px] font-bold font-hand ${theme.textMain} opacity-80 mt-[-2px] truncate max-w-full">${dateText}</span>
+                <div id="${day.id}" data-id="${day.id}" style="scroll-margin-top: 140px;" class="relative pl-12 sm:pl-16 border-l-2 ${isHighlight ? 'border-thai-red' : 'border-gray-200'} border-dashed pb-10 group">
+                    
+                    <div class="day-drag-handle absolute -left-3 sm:-left-4 top-0 flex flex-col items-center z-10 w-12 sm:w-14 cursor-grab active:cursor-grabbing hover:scale-105 transition-transform" title="按住可拖曳換天數">
+                        <div class="relative w-full aspect-square ${theme.bg} border-2 ${theme.border} rounded-xl shadow-md flex flex-col items-center justify-center p-1 hover:border-thai-blue transition-colors z-20" onclick="document.getElementById('quick-nav-container').scrollIntoView({behavior: 'smooth', block: 'center'})">
+                            <span class="text-[9px] font-black font-sans tracking-widest ${theme.textSub} mb-[-2px] pointer-events-none">DAY</span>
+                            <span class="text-2xl font-black font-maru leading-none ${theme.textMain} pointer-events-none">${idx + 1}</span>
+                            <span class="text-[10px] font-bold font-hand ${theme.textMain} opacity-80 mt-[-2px] truncate max-w-full pointer-events-none">${dateText}</span>
                         </div>
-                        <div class="h-4 w-0.5 bg-gray-300 -mt-1 relative z-10"></div>
-                        ${weatherGroupHtml || '<div class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white shadow-sm flex items-center justify-center text-xs text-gray-300 relative z-10"><i class="fa-solid fa-cloud"></i></div>'}
+                        <div class="h-4 w-0.5 bg-gray-300 -mt-1 relative z-10 pointer-events-none"></div>
+                        ${weatherGroupHtml || '<div class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white shadow-sm flex items-center justify-center text-xs text-gray-300 relative z-10 pointer-events-none"><i class="fa-solid fa-cloud"></i></div>'}
                     </div>
                     
                     <div class="bg-white p-5 rounded-2xl shadow-soft border border-gray-100 relative group/card hover:border-thai-blue/30 transition-colors">
@@ -1605,8 +1591,31 @@ function renderItinerary() {
                     </div>
                 </div>`;
             });
-        }        
-function openDayEditor(id){ 
+
+            // 啟動拖曳排序功能 (使用 Sortable.js)
+            if (window.itinerarySortable) {
+                window.itinerarySortable.destroy();
+            }
+            window.itinerarySortable = new Sortable(c, {
+                handle: '.day-drag-handle', // 指定只有抓「DAY標籤」才能拖拉
+                animation: 150,
+                onEnd: function (evt) {
+                    // 如果使用者有使用「清邁」或「曼谷」的篩選，就不允許他排序以免錯亂
+                    if (currentCityFilter !== 'all') {
+                        alert("💡 請切換回「全部」檢視模式，才能進行拖曳排序喔！");
+                        renderItinerary(); // 把畫面歸位
+                        return;
+                    }
+                    
+                    // 重新排列背後的陣列資料
+                    const movedItem = itinerary.splice(evt.oldIndex, 1)[0];
+                    itinerary.splice(evt.newIndex, 0, movedItem);
+                    
+                    saveData();
+                    renderItinerary();
+                }
+            });
+        }function openDayEditor(id){ 
             const d=itinerary.find(i=>i.id===id); 
             if(!d)return; 
             document.getElementById('day-id-edit').value=d.id; 
