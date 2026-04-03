@@ -696,11 +696,11 @@
                 <div id="guide-photo-text" class="text-xs text-gray-400"><i class="fa-solid fa-image mb-1 block"></i> 更新照片</div>
                 <img id="guide-photo-preview" class="hidden h-32 mx-auto object-cover rounded">
             </div>
-            <button onclick="saveGuide()" class="w-full bg-thai-green text-white py-2 rounded-lg font-bold">儲存</button>
-        </div>
-    </div>
-
-    <div id="pf-settings-modal" class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 backdrop-blur-sm">
+<div class="flex gap-2">
+                <button id="btn-delete-guide" onclick="deleteGuide()" class="flex-1 bg-gray-200 text-gray-500 py-2 rounded-lg text-sm hidden hover:bg-red-100 hover:text-red-500 transition">刪除</button>
+                <button onclick="saveGuide()" class="flex-[2] bg-thai-green text-white py-2 rounded-lg font-bold shadow">儲存</button>
+            </div>
+        </div> </div> <div id="pf-settings-modal" class="modal hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4 backdrop-blur-sm">
         <div class="bg-white w-full max-w-xs rounded-xl p-4 shadow-lg hand-card">
             <h4 class="font-bold mb-3 text-center text-lg handwritten">公費設定</h4>
             <div class="mb-4">
@@ -836,7 +836,44 @@
         let customStickers = []; // 儲存自訂貼紙
 
         let currentCityFilter = 'all';
+// 在變數區加入
+        let dayLongPressTimer = null;
+        let isEditMode = false; // 記錄是否處於顯示刪除鈕的模式
 
+        // 新增：根據 ID 刪除天數的函數
+        function deleteDayById(id) {
+            if (confirm("確定要刪除這一天的所有行程嗎？此操作無法復原喔！")) {
+                itinerary = itinerary.filter(d => d.id !== id);
+                saveData();
+                renderItinerary();
+                exitDayEditMode(); // 刪除後退出編輯狀態
+            }
+        }
+
+        // 進入/退出行程刪除模式
+        function enterDayEditMode() {
+            isEditMode = true;
+            document.querySelectorAll('.day-delete-badge').forEach(el => el.classList.remove('hidden'));
+            
+            // 延遲 500 毫秒才綁定「點擊空白處關閉」，避免手指放開時立刻誤觸關閉
+            setTimeout(() => {
+                document.addEventListener('click', handleOutsideClickForEditMode);
+            }, 500);
+        }
+
+        function exitDayEditMode() {
+            isEditMode = false;
+            document.querySelectorAll('.day-delete-badge').forEach(el => el.classList.add('hidden'));
+            document.removeEventListener('click', handleOutsideClickForEditMode);
+        }
+
+        // 新增：處理點擊空白處關閉的邏輯
+        function handleOutsideClickForEditMode(e) {
+            // 只要點擊的地方不是「紅色的刪除叉叉」，就退出編輯模式
+            if (!e.target.closest('.day-delete-badge')) {
+                exitDayEditMode();
+            }
+        }
         // --- CORE FUNCTIONS ---
         function getDataCount(dataObj) {
             if (!dataObj) {
@@ -1458,159 +1495,70 @@ function renderItinerary() {
                     const theme = themes[originalIdx % 7];
                     return `<button onclick="document.getElementById('${day.id}').scrollIntoView({behavior: 'smooth', block: 'start'})" class="relative w-full aspect-square flex items-center justify-center group hover:-translate-y-1 transition-transform duration-300"><i class="fa-solid fa-cloud text-5xl sm:text-6xl ${theme.cloud} drop-shadow-md group-hover:scale-110 transition-transform duration-300"></i><div class="absolute inset-0 flex flex-col items-center justify-center pt-3 pb-1"><span class="text-[8px] font-bold opacity-60 tracking-wider mb-px font-sans ${theme.text}">DAY</span><span class="text-xl font-black font-maru leading-none ${theme.text}">${originalIdx + 1}</span></div></button>`;
                 }).join('');
-                
-                // 新增一個小提示告訴自己可以拖曳
                 navC.innerHTML = `<div class="grid grid-cols-7 gap-1 max-w-md mx-auto px-1">${stickersHtml}</div>
-                                  <div class="text-center text-[11px] text-gray-400 mt-3 font-hand tracking-wider"><i class="fa-solid fa-arrows-up-down"></i> 提示：按住下方的 DAY 標籤可以上下拖曳換天數喔！</div>`;
-            } else if (navC) {
-                navC.innerHTML = '';
+                                  <div class="text-center text-[10px] text-gray-400 mt-3 font-hand tracking-widest opacity-60"><i class="fa-solid fa-hand-pointer mr-1"></i> 提示：長按 DAY 標籤可開啟刪除模式或拖曳排序</div>`;
             }
 
             filteredItinerary.forEach((day) => {
                 const idx = itinerary.indexOf(day); 
-                
                 let contentHtml = (typeof linkifyContent === 'function') ? linkifyContent(day.content) : day.content;
-                const accLink = day.accommodationUrl || (typeof checkUrl === 'function' ? checkUrl(day.accommodation) : null);
-                
-                const stickerThemes = [ { bg: 'bg-pink-50', border: 'border-pink-200', textMain: 'text-pink-700', textSub: 'text-pink-400' }, { bg: 'bg-yellow-50', border: 'border-yellow-200', textMain: 'text-yellow-800', textSub: 'text-yellow-500' }, { bg: 'bg-blue-50', border: 'border-blue-200', textMain: 'text-blue-700', textSub: 'text-blue-400' }, { bg: 'bg-green-50', border: 'border-green-200', textMain: 'text-green-700', textSub: 'text-green-500' }, { bg: 'bg-purple-50', border: 'border-purple-200', textMain: 'text-purple-700', textSub: 'text-purple-400' }, { bg: 'bg-orange-50', border: 'border-orange-200', textMain: 'text-orange-800', textSub: 'text-orange-500' }, { bg: 'bg-cyan-50', border: 'border-cyan-200', textMain: 'text-cyan-700', textSub: 'text-cyan-500' } ];
-                const theme = stickerThemes[idx % 7];
+                const theme = [ { bg: 'bg-pink-50', border: 'border-pink-200', textMain: 'text-pink-700', textSub: 'text-pink-400' }, { bg: 'bg-yellow-50', border: 'border-yellow-200', textMain: 'text-yellow-800', textSub: 'text-yellow-500' }, { bg: 'bg-blue-50', border: 'border-blue-200', textMain: 'text-blue-700', textSub: 'text-blue-400' }, { bg: 'bg-green-50', border: 'border-green-200', textMain: 'text-green-700', textSub: 'text-green-500' }, { bg: 'bg-purple-50', border: 'border-purple-200', textMain: 'text-purple-700', textSub: 'text-purple-400' }, { bg: 'bg-orange-50', border: 'border-orange-200', textMain: 'text-orange-800', textSub: 'text-orange-500' }, { bg: 'bg-cyan-50', border: 'border-cyan-200', textMain: 'text-cyan-700', textSub: 'text-cyan-500' } ][idx % 7];
                 
                 const fullText = day.date || "";
                 let dateText = fullText.split(' ')[0];
-                let titleText = fullText.substring(dateText.length).trim();
-                if (!titleText) titleText = fullText;
-
-                const searchUrl = "https://weather.com/weather/tenday/l/Chiang+Mai+Thailand";
-                const wIcon = (typeof WEATHER_MAP !== 'undefined') ? (WEATHER_MAP[day.weather] || '<i class="fa-solid fa-question text-gray-200"></i>') : '';
-                let tempBadgeHtml = '';
-                if (day.temp) {
-                    const tempVal = parseInt(day.temp);
-                    let tempClass = 'temp-warm';
-                    if (!isNaN(tempVal)) { if (tempVal >= 28) tempClass = 'temp-hot'; else if (tempVal >= 20) tempClass = 'temp-warm'; else if (tempVal >= 10) tempClass = 'temp-cool'; else tempClass = 'temp-cold'; }
-                    const displayTemp = day.temp.replace(/c/ig, '').trim();
-                    tempBadgeHtml = `<span class="temp-badge ${tempClass} px-2 min-w-[3rem] text-center inline-block shadow-sm border border-white/50">${displayTemp}°C</span>`;
-                }
-                const weatherGroupHtml = (day.weather || day.temp) ? `<a href="${searchUrl}" target="_blank" class="weather-group group/weather no-underline mt-1 flex flex-col items-center" title="搜尋天氣">${tempBadgeHtml}<div class="weather-badge group-hover/weather:scale-110 transition-transform text-lg shadow-md border-2 border-white mt-0.5">${wIcon}</div></a>` : '';
-
-                const photosHtml = day.photos?.length ? `<div class="mt-3 grid grid-cols-3 gap-1 rounded-lg overflow-hidden">${day.photos.map(p=>`<img src="${p}" class="w-full aspect-square object-cover cursor-pointer hover:opacity-90" onclick="viewPhoto('${p}')">`).join('')}</div>` : '';
+                let titleText = fullText.substring(dateText.length).trim() || fullText;
+                const wIcon = (typeof WEATHER_MAP !== 'undefined') ? (WEATHER_MAP[day.weather] || '<i class="fa-solid fa-cloud text-gray-100"></i>') : '';
                 
-                const accHtml = day.accommodation ? `<div class="mt-3 text-sm text-gray-600 border-t pt-3 border-dashed border-gray-200"><div class="flex items-start gap-2"><button onclick="openAccModal('${day.id}')" class="w-8 h-8 rounded-full bg-thai-blue/10 hover:bg-thai-blue/20 text-thai-blue flex items-center justify-center transition shadow-sm active:scale-95 group relative flex-shrink-0" title="管理住宿照片"><i class="fa-solid fa-bed"></i>${day.accPhotos && day.accPhotos.length > 0 ? `<span class="absolute -top-1 -right-1 w-3 h-3 bg-red-400 rounded-full border-2 border-white"></span>` : ''}</button><div class="flex-1 min-w-0 pt-1">${accLink ? `<a href="${accLink}" target="_blank" class="underline decoration-dotted hover:text-thai-blue font-bold block truncate text-base">${day.accommodation}</a>` : `<span class="font-bold block truncate text-base">${day.accommodation}</span>`}${day.accommodationNote ? `<div class="text-xs text-gray-400 mt-1 font-hand line-pre"><i class="fa-solid fa-circle-info mr-1 text-[10px]"></i>${day.accommodationNote}</div>` : ''}</div></div></div>` : '';
-
-                const renderMealItem = (type, icon, color) => { const m = day.meals?.[type]; if(!m || !m.name) return ''; const linkPart = m.link ? `<a href="${m.link}" target="_blank" class="hover:text-thai-blue underline decoration-dotted ml-1 font-bold">${m.name}</a>` : `<span class="ml-1 font-bold">${m.name}</span>`; const notePart = m.note ? `<span class="text-[10px] text-gray-400 ml-2 border-l pl-2 border-gray-300 line-pre">${m.note}</span>` : ''; return `<div class="flex items-start gap-1 p-1"><i class="fa-solid ${icon} ${color} cursor-pointer hover:scale-125 transition flex-shrink-0 mt-0.5" onclick="quickExpense('${m.name}', '餐飲')" title="點擊記帳"></i><div class="flex-1 min-w-0">${linkPart}${notePart}</div></div>`; };
-                const mealsHtml = (day.meals && (day.meals.b?.name || day.meals.l?.name || day.meals.d?.name)) ? `<div class="mt-3 flex flex-col gap-2 text-xs text-gray-500 border-t border-dashed border-gray-200 pt-2 px-1">${renderMealItem('b', 'fa-mug-hot', 'text-orange-300')}${renderMealItem('l', 'fa-utensils', 'text-green-400')}${renderMealItem('d', 'fa-wine-glass', 'text-purple-400')}</div>` : '';
-
-                const massagesHtml = (day.massages && day.massages.length > 0) ? `<div class="mt-3 flex flex-col gap-2 text-xs text-gray-500 border-t border-dashed border-gray-200 pt-2 px-1">
-                    ${day.massages.map(m => {
-                        const linkPart = m.link ? `<a href="${m.link}" target="_blank" class="hover:text-purple-500 underline decoration-dotted ml-1 font-bold text-purple-700">${m.name}</a>` : `<span class="ml-1 font-bold text-purple-700">${m.name}</span>`;
-                        const timePart = m.time ? `<span class="font-mono bg-purple-50 text-purple-600 px-1 rounded mr-1 border border-purple-100">${m.time}</span>` : '';
-                        const pricePart = m.price ? `<div class="text-[10px] text-gray-500 ml-6 font-mono border-l-2 border-purple-100 pl-1"><i class="fa-solid fa-tag text-purple-300 mr-1"></i> ${m.price}</div>` : '';
-                        const notePart = m.note ? `<div class="text-[10px] text-gray-400 ml-6 border-l-2 border-purple-100 pl-1 line-pre">${m.note}</div>` : '';
-                        const photoPart = m.photo ? `<div class="ml-6 mt-1"><img src="${m.photo}" class="w-12 h-12 rounded border border-gray-200 object-cover cursor-zoom-in hover:scale-110 transition shadow-sm bg-white" onclick="viewPhoto('${m.photo}')"></div>` : '';
-                        return `<div class="flex flex-col gap-0.5 p-1 bg-purple-50/30 rounded-lg border border-purple-50">
-                            <div class="flex items-start">
-                                <i class="fa-solid fa-spa text-purple-400 mt-0.5"></i>
-                                <div class="flex-1 min-w-0 ml-1">
-                                    ${timePart}${linkPart}
-                                </div>
-                            </div>
-                            ${pricePart}
-                            ${notePart}
-                            ${photoPart}
-                        </div>`;
-                    }).join('')}
-                </div>` : '';
-
-                let transData = Array.isArray(day.transportation) ? day.transportation : (day.transportation ? [day.transportation] : []);
-                const transHtml = transData.map((t) => {
-                    let allPhotos = t.photos || [];
-                    if (allPhotos.length === 0 && t.photo) {
-                        allPhotos = [t.photo]; 
-                    }
-
-                    const imagesHtml = allPhotos.map(p => {
-                        const src = (typeof p === 'object' && p.url) ? p.url : p;
-                        return `<img src="${src}" onclick="viewPhoto('${src}')" class="w-10 h-10 rounded-lg object-cover border border-gray-200 shadow-sm cursor-zoom-in hover:scale-110 transition bg-white" title="點擊放大">`;
-                    }).join('');
-
-                    return `
-                    <div class="mt-2 bg-gray-50 p-3 rounded-lg border border-gray-100 text-sm group/trans hover:bg-gray-100 transition">
-                        <div class="font-bold text-gray-500 flex items-center gap-2 mb-1">
-                            <i class="fa-solid ${t.icon || 'fa-train-subway'} text-blue-400 w-5 text-center"></i>
-                            ${t.time ? `<span class="text-xs font-normal bg-white px-2 py-0.5 rounded border border-gray-200 text-gray-400 font-mono text-thai-blue">${t.time}</span>` : ''}
-                            <span class="text-gray-700">${t.content || '交通移動'}</span>
-                        </div>
-                        ${t.note ? `<div class="ml-9 text-xs text-gray-400 mt-1 border-l-2 border-gray-200 pl-2 mb-1 line-pre">${t.note}</div>` : ''}
-                        
-                        ${imagesHtml ? `<div class="mt-1 ml-9 flex flex-wrap gap-2">${imagesHtml}</div>` : ''}
-                    </div>`;
-                }).join('');
-
-                const noteHtml = day.dayNote ? `<div class="mt-3 p-2 bg-yellow-50 text-yellow-800 text-xs rounded border border-yellow-100 handwritten leading-relaxed line-pre"><i class="fa-solid fa-pencil mr-1"></i> ${day.dayNote}</div>` : '';
-                
-                const isHighlight = day.highlight;
-                const titleStickerBg = isHighlight ? 'bg-[#fff0f5]' : 'bg-[#fff8e1]';
-                const titleStickerBorder = isHighlight ? 'border-thai-red' : 'border-[#e6dbbf]';
-                const titleStickerText = isHighlight ? 'text-thai-red' : 'text-[#827355]';
+                const photosHtml = day.photos?.length ? `<div class="mt-3 grid grid-cols-3 gap-1 rounded-lg overflow-hidden">${day.photos.map(p=>`<img src="${p}" class="w-full aspect-square object-cover cursor-pointer" onclick="viewPhoto('${p}')">`).join('')}</div>` : '';
+                const accHtml = day.accommodation ? `<div class="mt-3 text-sm text-gray-600 border-t pt-3 border-dashed border-gray-200 flex items-start gap-2"><button onclick="openAccModal('${day.id}')" class="w-8 h-8 rounded-full bg-thai-blue/10 text-thai-blue flex items-center justify-center shrink-0"><i class="fa-solid fa-bed"></i></button><div class="flex-1 truncate"><span class="font-bold block text-base">${day.accommodation}</span></div></div>` : '';
+                const massagesHtml = (day.massages && day.massages.length > 0) ? `<div class="mt-3 flex flex-col gap-2 text-xs border-t border-dashed border-gray-200 pt-2">${day.massages.map(m => `<div class="flex flex-col p-1 bg-purple-50/30 rounded-lg border border-purple-50"><div class="flex items-start"><i class="fa-solid fa-spa text-purple-400 mt-0.5 mr-1"></i><span class="font-bold text-purple-700">${m.name}</span></div></div>`).join('')}</div>` : '';
 
                 c.innerHTML += `
-                <div id="${day.id}" data-id="${day.id}" style="scroll-margin-top: 140px;" class="relative pl-12 sm:pl-16 border-l-2 ${isHighlight ? 'border-thai-red' : 'border-gray-200'} border-dashed pb-10 group">
+                <div id="${day.id}" data-id="${day.id}" style="scroll-margin-top: 140px;" class="relative pl-12 sm:pl-16 border-l-2 ${day.highlight ? 'border-thai-red' : 'border-gray-200'} border-dashed pb-10 group">
                     
-                    <div class="day-drag-handle absolute -left-3 sm:-left-4 top-0 flex flex-col items-center z-10 w-12 sm:w-14 cursor-grab active:cursor-grabbing hover:scale-105 transition-transform" title="按住可拖曳換天數">
-                        <div class="relative w-full aspect-square ${theme.bg} border-2 ${theme.border} rounded-xl shadow-md flex flex-col items-center justify-center p-1 hover:border-thai-blue transition-colors z-20" onclick="document.getElementById('quick-nav-container').scrollIntoView({behavior: 'smooth', block: 'center'})">
-                            <span class="text-[9px] font-black font-sans tracking-widest ${theme.textSub} mb-[-2px] pointer-events-none">DAY</span>
-                            <span class="text-2xl font-black font-maru leading-none ${theme.textMain} pointer-events-none">${idx + 1}</span>
-                            <span class="text-[10px] font-bold font-hand ${theme.textMain} opacity-80 mt-[-2px] truncate max-w-full pointer-events-none">${dateText}</span>
+                    <button onclick="event.stopPropagation(); deleteDayById('${day.id}')" class="day-delete-badge hidden absolute -top-2 -right-2 bg-red-500 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-lg z-50 animate-pulse">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                    <div class="day-drag-handle absolute -left-3 sm:-left-4 top-0 flex flex-col items-center z-10 w-12 sm:w-14 cursor-grab" 
+                         onmousedown="dayLongPressTimer = setTimeout(enterDayEditMode, 800)" 
+                         onmouseup="clearTimeout(dayLongPressTimer)"
+                         ontouchstart="dayLongPressTimer = setTimeout(enterDayEditMode, 800)"
+                         ontouchend="clearTimeout(dayLongPressTimer)">
+                        <div class="relative w-full aspect-square ${theme.bg} border-2 ${theme.border} rounded-xl shadow-md flex flex-col items-center justify-center p-1">
+                            <span class="text-[9px] font-black ${theme.textSub} mb-[-2px]">DAY</span>
+                            <span class="text-2xl font-black font-maru leading-none ${theme.textMain}">${idx + 1}</span>
                         </div>
-                        <div class="h-4 w-0.5 bg-gray-300 -mt-1 relative z-10 pointer-events-none"></div>
-                        ${weatherGroupHtml || '<div class="w-8 h-8 rounded-full bg-gray-100 border-2 border-white shadow-sm flex items-center justify-center text-xs text-gray-300 relative z-10 pointer-events-none"><i class="fa-solid fa-cloud"></i></div>'}
                     </div>
                     
-                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-gray-100 relative group/card hover:border-thai-blue/30 transition-colors">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-gray-100 relative">
                         <div class="flex justify-between items-start mb-4">
-                            <div class="relative transform -rotate-1 hover:rotate-0 transition-transform duration-300 cursor-pointer" onclick="openDayEditor('${day.id}')">
-                                <div class="absolute -top-2.5 left-1/2 -translate-x-1/2 w-8 h-4 bg-white/40 backdrop-blur-[1px] border border-white/20 rounded-sm shadow-sm z-20"></div>
-                                <div class="relative ${titleStickerBg} border-2 ${titleStickerBorder} px-4 py-2 rounded-lg shadow-md min-w-[5rem] text-center">
-                                    <h4 class="text-xl font-black font-maru tracking-widest ${titleStickerText} leading-tight">${titleText}</h4>
+                            <div class="relative transform -rotate-1 cursor-pointer" onclick="openDayEditor('${day.id}')">
+                                <div class="bg-[#fff8e1] border-2 border-[#e6dbbf] px-4 py-2 rounded-lg shadow-md">
+                                    <h4 class="text-xl font-black font-maru ${day.highlight ? 'text-thai-red' : 'text-[#827355]'}">${titleText}</h4>
                                 </div>
                             </div>
-                            <button onclick="openDayEditor('${day.id}')" class="text-gray-200 hover:text-thai-blue transition p-2 hover:bg-gray-50 rounded-full">
-                                <i class="fa-solid fa-pen text-sm"></i>
-                            </button>
+                            <button onclick="openDayEditor('${day.id}')" class="text-gray-200 hover:text-thai-blue transition p-2"><i class="fa-solid fa-pen text-sm"></i></button>
                         </div>
-                        
-                        <ul class="text-sm space-y-3 leading-relaxed text-gray-700 font-maru font-bold text-lg mb-3">
-                            ${contentHtml}
-                        </ul>
-                        
-                        ${photosHtml}
-                        ${accHtml}
-                        ${transHtml}
-                        ${mealsHtml}
-                        ${massagesHtml}
-                        ${noteHtml}
+                        <ul class="text-sm space-y-3 leading-relaxed text-gray-700 font-maru font-bold text-lg mb-3">${contentHtml}</ul>
+                        ${photosHtml} ${accHtml} ${massagesHtml}
                     </div>
                 </div>`;
             });
 
-            // 啟動拖曳排序功能 (使用 Sortable.js)
-            if (window.itinerarySortable) {
-                window.itinerarySortable.destroy();
-            }
+            if (window.itinerarySortable) window.itinerarySortable.destroy();
             window.itinerarySortable = new Sortable(c, {
-                handle: '.day-drag-handle', // 指定只有抓「DAY標籤」才能拖拉
+                handle: '.day-drag-handle',
                 animation: 150,
+                delay: 200, // 稍微延遲以區分單擊與拖拽
                 onEnd: function (evt) {
-                    // 如果使用者有使用「清邁」或「曼谷」的篩選，就不允許他排序以免錯亂
                     if (currentCityFilter !== 'all') {
-                        alert("💡 請切換回「全部」檢視模式，才能進行拖曳排序喔！");
-                        renderItinerary(); // 把畫面歸位
+                        alert("請在「全部」模式下調整排序");
+                        renderItinerary();
                         return;
                     }
-                    
-                    // 重新排列背後的陣列資料
                     const movedItem = itinerary.splice(evt.oldIndex, 1)[0];
                     itinerary.splice(evt.newIndex, 0, movedItem);
-                    
                     saveData();
                     renderItinerary();
                 }
@@ -1724,7 +1672,17 @@ document.getElementById('day-accommodation-url-edit').value = d.accommodationUrl
             }); 
             openModal('day-modal'); 
         }
-
+function deleteDay() {
+            const currentId = document.getElementById('day-id-edit').value;
+            if (currentId) {
+                if (confirm("確定要刪除這一天的行程嗎？此操作無法復原喔！")) {
+                    itinerary = itinerary.filter(d => String(d.id) !== String(currentId));
+                    saveData();
+                    renderItinerary();
+                    closeModal('day-modal');
+                }
+            }
+        }
         function saveDay(){ 
             const idx=itinerary.findIndex(i=>i.id===document.getElementById('day-id-edit').value); 
             if(idx<0)return; 
@@ -1753,8 +1711,75 @@ document.getElementById('day-accommodation-url-edit').value = d.accommodationUrl
         function renderDayPhotosPreview() { document.getElementById('day-photos-preview').innerHTML = tempDayPhotos.map((p, i) => `<div class="relative"><img src="${p}" class="w-full h-full rounded"><button onclick="tempDayPhotos.splice(${i},1);renderDayPhotosPreview()" class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 text-xs">x</button></div>`).join(''); }
 
         function renderGuides(){ const l=document.getElementById('guide-list'); l.innerHTML=''; if(window.guideSortable) window.guideSortable.destroy(); guides.forEach(g=>{ l.innerHTML+=`<div id="guide-${g.id}" data-id="${g.id}" class="hand-card p-0 overflow-hidden relative group transition-colors duration-500"><div class="drag-handle absolute top-0 left-0 h-full w-10 bg-black/5 flex items-center justify-center z-20 cursor-grab hover:bg-black/10 transition-colors"><i class="fa-solid fa-grip-vertical text-gray-400"></i></div><button onclick="event.stopPropagation(); openGuideModal(${g.id})" class="absolute top-2 right-2 z-50 bg-white/80 rounded-full w-8 h-8 flex items-center justify-center shadow hover:bg-white"><i class="fa-solid fa-pen text-gray-500"></i></button>${g.photo?`<img src="${g.photo}" class="w-full h-40 object-cover ml-10" style="width:calc(100% - 2.5rem)" onclick="viewPhoto('${g.photo}')">`:''} <div class="p-4 pl-14"><h3 class="font-bold text-lg font-hand text-xl">${g.title}</h3><div class="flex gap-2 mb-2 mt-1">${g.price ? `<span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded"><i class="fa-solid fa-tag"></i> ${g.price}</span>` : ''}${g.time ? `<span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded"><i class="fa-regular fa-clock"></i> ${g.time}</span>` : ''}</div><p class="text-sm whitespace-pre-line text-gray-600 leading-relaxed">${g.desc}</p></div></div>`; }); window.guideSortable = new Sortable(l, { handle: '.drag-handle', animation: 150, onEnd: function (evt) { const item = guides.splice(evt.oldIndex, 1)[0]; guides.splice(evt.newIndex, 0, item); saveData(); } }); }
-        function openGuideModal(id=null) { currentGuidePhoto=null; document.getElementById('guide-photo-preview').classList.add('hidden'); document.getElementById('guide-photo-text').classList.remove('hidden'); if(id){const g=guides.find(i=>i.id==id); document.getElementById('guide-id').value=g.id; document.getElementById('guide-title').value=g.title; document.getElementById('guide-desc').value=g.desc; document.getElementById('guide-price').value=g.price||""; document.getElementById('guide-time').value=g.time||""; if(g.photo){currentGuidePhoto=g.photo; document.getElementById('guide-photo-preview').src=g.photo; document.getElementById('guide-photo-preview').classList.remove('hidden'); document.getElementById('guide-photo-text').classList.add('hidden');}} else { ['guide-id','guide-title','guide-desc','guide-price','guide-time'].forEach(k=>document.getElementById(k).value=''); } openModal('guide-modal'); }
-        function saveGuide() { const id=document.getElementById('guide-id').value, t=document.getElementById('guide-title').value; if(!t)return; const newItem = {id:id?parseInt(id):Date.now(), title:t, desc:document.getElementById('guide-desc').value, price:document.getElementById('guide-price').value, time:document.getElementById('guide-time').value, photo:currentGuidePhoto||(id?guides.find(i=>i.id==id).photo:null)}; if(id){const idx=guides.findIndex(i=>i.id==id);if(idx>-1)guides[idx]=newItem;}else{guides.push(newItem);} saveData(); renderGuides(); closeModal('guide-modal'); }
+        function openGuideModal(id=null) { 
+            currentGuidePhoto = null; 
+            document.getElementById('guide-photo-preview').classList.add('hidden'); 
+            document.getElementById('guide-photo-text').classList.remove('hidden'); 
+            const delBtn = document.getElementById('btn-delete-guide');
+
+            if(id) {
+                const g = guides.find(i => i.id == id); 
+                document.getElementById('guide-id').value = g.id; 
+                document.getElementById('guide-title').value = g.title; 
+                document.getElementById('guide-desc').value = g.desc; 
+                document.getElementById('guide-price').value = g.price || ""; 
+                document.getElementById('guide-time').value = g.time || ""; 
+                
+                // 編輯模式：顯示刪除按鈕
+                if(delBtn) delBtn.classList.remove('hidden'); 
+
+                if(g.photo) {
+                    currentGuidePhoto = g.photo; 
+                    document.getElementById('guide-photo-preview').src = g.photo; 
+                    document.getElementById('guide-photo-preview').classList.remove('hidden'); 
+                    document.getElementById('guide-photo-text').classList.add('hidden');
+                }
+            } else { 
+                ['guide-id','guide-title','guide-desc','guide-price','guide-time'].forEach(k => document.getElementById(k).value = ''); 
+                
+                // 新增模式：隱藏刪除按鈕
+                if(delBtn) delBtn.classList.add('hidden'); 
+            } 
+            openModal('guide-modal'); 
+        }
+
+        function saveGuide() { 
+            const id = document.getElementById('guide-id').value;
+            const t = document.getElementById('guide-title').value; 
+            if(!t) return; 
+            
+            const newItem = {
+                id: id ? parseInt(id) : Date.now(), 
+                title: t, 
+                desc: document.getElementById('guide-desc').value, 
+                price: document.getElementById('guide-price').value, 
+                time: document.getElementById('guide-time').value, 
+                photo: currentGuidePhoto || (id ? guides.find(i => i.id == id).photo : null)
+            }; 
+            
+            if(id) {
+                const idx = guides.findIndex(i => i.id == id);
+                if(idx > -1) guides[idx] = newItem;
+            } else {
+                guides.push(newItem);
+            } 
+            saveData(); 
+            renderGuides(); 
+            closeModal('guide-modal'); 
+        }
+
+        // 新增：刪除導覽景點的函數
+        function deleteGuide() {
+            const id = document.getElementById('guide-id').value;
+            if (id) {
+                if (confirm("確定要刪除這個景點嗎？")) {
+                    guides = guides.filter(g => String(g.id) !== String(id));
+                    saveData();
+                    renderGuides();
+                    closeModal('guide-modal');
+                }
+            }
+        }
 
         function renderFlights() { document.getElementById('flight-list-container').innerHTML = flights.map(f => { const planeIcon = f.url ? `<a href="${f.url}" target="_blank" class="cursor-pointer hover:scale-110 transition-transform inline-block" title="前往官網"><i class="fa-solid fa-plane text-thai-blue text-2xl rotate-[-45deg]"></i></a>` : `<i class="fa-solid fa-plane text-thai-blue text-2xl rotate-[-45deg]"></i>`; const codeDisplay = f.photo ? `<div onclick="viewPhoto('${f.photo}')" class="font-bold text-thai-blue text-xl handwritten cursor-pointer hover:text-blue-600 border-b-2 border-dashed border-thai-blue/30 inline-block px-2" title="查看機票截圖">${f.code} <i class="fa-solid fa-image text-[10px] align-top opacity-50"></i></div>` : `<div class="font-bold text-thai-blue text-xl handwritten">${f.code}</div>`; return `<div class="bg-white rounded-[24px] p-5 shadow-soft relative hand-card group"><button onclick="editFlight(${f.id})" class="absolute top-3 right-3 text-gray-300 hover:text-thai-blue transition"><i class="fa-solid fa-pen"></i></button><div class="flex justify-between items-center mb-4 px-2"><span class="text-4xl font-black handwritten text-pencil">${f.dep}</span>${planeIcon}<span class="text-4xl font-black handwritten text-pencil">${f.arr}</span></div><div class="bg-thai-blue-light/50 rounded-2xl py-3 px-4 text-center border border-thai-blue/10">${codeDisplay}<div class="text-lg font-bold text-gray-600 mt-2">${f.date} ${f.time}</div></div></div>`; }).join(''); }
         function saveFlight(){ const id=document.getElementById('flight-id').value; const f={ id:id?parseInt(id):Date.now(), dep:document.getElementById('flight-dep').value, arr:document.getElementById('flight-arr').value, code:document.getElementById('flight-code').value, time:document.getElementById('flight-time').value, date:document.getElementById('flight-date').value, url:document.getElementById('flight-url').value, photo: currentFlightPhoto }; if(id){const idx=flights.findIndex(i=>i.id==id);if(idx>-1)flights[idx]=f;}else{flights.push(f);} saveData(); renderFlights(); closeModal('flight-modal'); }
